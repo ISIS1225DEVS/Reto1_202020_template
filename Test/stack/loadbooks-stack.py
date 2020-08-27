@@ -19,66 +19,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-
 import config as cf
 import csv
 from ADT import queue as q
-from  DataStructures import listiterator as it
+from DataStructures import listiterator as it
 
 
-def loadCSVFile (file, queue):
+def loadCSVFile(file, queue):
     input_file = csv.DictReader(open(file))
-    for row in input_file:  
-        q.enqueue(queue,row)
+    for row in input_file:
+        q.enqueue(queue, row)
 
-def printQueue (queue):
+
+def printQueue(queue):
     iterator = it.newIterator(queue)
-    while  it.hasNext(iterator):
+    while it.hasNext(iterator):
         element = it.next(iterator)
-        print (element)
+        print(element)
 
-print ('Creating books queue')
-lst_books= q.newQueue()
 
-print ('Creating tag queue')
-lst_tags=  q.newQueue('ARRAY_LIST')
+print('Creating books queue')
+lst_books = q.newQueue()
 
-print ('Creating books-tag queue')
-lst_book_tags= q.newQueue()
+print('Creating tag queue')
+lst_tags = q.newQueue('ARRAY_LIST')
 
-print ('Creating ratings queue')
-lst_ratings= q.newQueue()
+print('Creating books-tag queue')
+lst_book_tags = q.newQueue()
 
-print ('Creating to-read queue')
-lst_to_read= q.newQueue()
+print('Creating ratings queue')
+lst_ratings = q.newQueue()
 
-print ('Loading books')
+print('Creating to-read queue')
+lst_to_read = q.newQueue()
+
+print('Loading books')
 booksfile = cf.data_dir + 'GoodReads/books.csv'
-loadCSVFile (booksfile, lst_books)
-print (lst_books['size'])
-printQueue (lst_books)
+loadCSVFile(booksfile, lst_books)
+print(lst_books['size'])
+printQueue(lst_books)
 
-
-print ('Loading tags')
+print('Loading tags')
 tagsfile = cf.data_dir + 'GoodReads/tags.csv'
-loadCSVFile (tagsfile, lst_tags)
-print (lst_tags['size'])
-printQueue (lst_tags)
+loadCSVFile(tagsfile, lst_tags)
+print(lst_tags['size'])
+printQueue(lst_tags)
 
-print ('Loading books-tags')
+print('Loading books-tags')
 booktagsfile = cf.data_dir + 'GoodReads/book_tags.csv'
-loadCSVFile (booktagsfile, lst_book_tags)
-print (lst_book_tags['size'])
-#printList (lst_book_tags)
+loadCSVFile(booktagsfile, lst_book_tags)
+print(lst_book_tags['size'])
+# printList (lst_book_tags)
 
-print ('Loading ratings')
+print('Loading ratings')
 ratingsfile = cf.data_dir + 'GoodReads/ratings.csv'
-loadCSVFile (ratingsfile, lst_ratings)
-print (lst_ratings['size'])
-#printList (lst_ratings)
+loadCSVFile(ratingsfile, lst_ratings)
+print(lst_ratings['size'])
+# printList (lst_ratings)
 
-print ('Loading books to read')
+print('Loading books to read')
 toreadfile = cf.data_dir + 'GoodReads/to_read.csv'
-loadCSVFile (toreadfile, lst_to_read)
-print (lst_to_read['size'])
-#printList (lst_to_read)
+loadCSVFile(toreadfile, lst_to_read)
+print(lst_to_read['size'])
+# printList (lst_to_read)
