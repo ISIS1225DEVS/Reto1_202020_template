@@ -20,7 +20,7 @@ Estructuras de Datos y Algoritmos de la Universidad de los Andes.
 ## Estructura del proyecto
 
 *	ADT: archivos Python con la definición de los Tipos Abstractos de Datos.
-*	App: aplicación Python cliente que usa las ADTs y ordenamientos para dar solución a laboratorios y retos.
+*	App: los archivos python desarrollados para responder a los retos del curso. Acá se pueden tener todos los archivos python que se necesiten.
 *	Data: archivos con los datos (csv, json, txt, etc) usados en el laboratorio o reto. El contenido de esta carpeta NO se debe versionar.
 *	DataStructures: archivos Python con las estructuras de datos básicas (listas enlazadas y arreglos).
 *	Sorting: archivos Python que implementan los algoritmos de ordenamiento.
