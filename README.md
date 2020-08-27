@@ -1,4 +1,4 @@
-# Laboratorio #2
+# Reto 1
 
 ### Listas y ordenamientos
 
