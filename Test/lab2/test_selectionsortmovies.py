@@ -28,49 +28,68 @@ import csv
 
 # list_type = 'ARRAY_LIST'
 list_type = 'SINGLE_LINKED'
+lst_movies = lt.newList(list_type)
+moviesfile = cf.data_dir + 'MoviesDetailsCleaned-small.csv'
 
 
-@pytest.fixture
-def lst_books():
-    lst = lt.newList(list_type)
-    booksfile = cf.data_dir + 'GoodReads/books-small.csv'
-    loadCSVFile(booksfile, lst)
-    return lst
+def setUp():
+    print('Loading movies')
+    loadCSVFile(moviesfile, lst_movies)
+    print(lst_movies['size'])
+
+
+def tearDown():
+    pass
 
 
 def loadCSVFile(file, lst):
-    input_file = csv.DictReader(open(file, encoding="utf-8"))
-    for row in input_file:
-        lt.addLast(lst, row)
+    dialect = csv.excel()
+    dialect.delimiter = ';'
+    with open(file, encoding='utf-8-sig') as data:
+        input_file = csv.DictReader(data, dialect=dialect)
+        for row in input_file:
+            print(row)
+            lt.addLast(lst, row)
 
 
 def printList(lst):
     iterator = it.newIterator(lst)
     while it.hasNext(iterator):
         element = it.next(iterator)
-        print(element['goodreads_book_id'])
+        print(element['vote_average'])
 
 
 def less(element1, element2):
-    if int(element1['goodreads_book_id']) < int(element2['goodreads_book_id']):
+    if float(element1['vote_average']) < float(element2['vote_average']):
         return True
     return False
 
 
-def test_loading_CSV_y_ordenamiento(lst_books):
+def greater(element1, element2):
+    if float(element1['vote_average']) > float(element2['vote_average']):
+        return True
+    return False
+
+
+def test_sort():
+    """
+    Lista con elementos en orden aleatorio
+    """
+    print('sorting ....')
+    sort.selectionSort(lst_movies, less)
+
+
+def test_loading_CSV_y_ordenamiento():
     """
     Prueba que se pueda leer el archivo y que despues de relizar el sort, el orden este correcto
     """
-    element = lt.lastElement(lst_books)
-    assert element['goodreads_book_id'] == '4374400'
-    element = lt.firstElement(lst_books)
-    assert element['goodreads_book_id'] == '2767052'
-
-    sort.selectionSort(lst_books, less)
-
-    tam = lt.size(lst_books)
-    assert tam == 149
-    element = lt.lastElement(lst_books)
-    assert element['goodreads_book_id'] == '22557272'
-    element = lt.firstElement(lst_books)
-    assert element['goodreads_book_id'] == '1'
+    setUp()
+    sort.selectionSort(lst_movies, less)
+    while not (lt.isEmpty(lst_movies)):
+        x = float(lt.removeLast(lst_movies)['vote_average'])
+        if not (lt.isEmpty(lst_movies)):
+            y = float(lt.removeLast(lst_movies)['vote_average'])
+        else:
+            break
+        print(x, y)
+        assert x > y or x == y
