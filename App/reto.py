@@ -77,10 +77,35 @@ def loadCSVFile (file, cmpfunction):
     return lst
 
 
-def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+def loadMovies_casting ():
+    lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def loadMovies_details ():
+    lst= loadCSVFile('theMoviesdb/SmallMoviesDetailsCleaned.csv',compareRecordIds)
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
+
+def requerimiento_3(casting,details,director_name):
+    size= lt.size(casting)
+    dirigidas= []
+    numero= 0
+    calificacion= 0
+    for i in range(0,size):
+        elem= lt.getElement(casting,i)
+        elem2= lt.getElement(details,i)
+        if elem['director_name'] == director_name :
+            dirigidas.append(elem2['original_title'])
+            calificacion+= float(elem2['vote_average'])
+            numero+=1
+    if len(dirigidas) >= 1 :
+        print('El director '+ director_name + ' ha dirigido ' + str(numero) + ' peliculas, y la calificacion promedio de las mismas es '+ str(round((calificacion/numero),2))+ '.' )
+        print('A continuacion se listan los nombres de las peliculas')
+        print(dirigidas)
+    else: 
+        print('El director no esta en la lista, Intente nuevamente')
 
 
 def main():
@@ -99,13 +124,16 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
+                lst_cas = loadMovies_casting()
+                lst_det = loadMovies_details()
 
             elif int(inputs[0])==2: #opcion 2
                 pass
 
             elif int(inputs[0])==3: #opcion 3
                 pass
+                dir= input('Ingrese el nombre del Director: ')
+                requerimiento_3(lst_cas,lst_det,dir)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
