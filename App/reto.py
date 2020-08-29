@@ -92,10 +92,10 @@ def greater (element1,element2, criteria):
         return True
     return False
 
-def selectionSort (lst, lessfunction, criteria,size): 
-    pos1 = 1
+def selectionSort (lst, lessfunction, criteria,size):    #Se utiliza selection sort para que se organicen solo las primeras posiciones del ranking, y así
+    pos1 = 1                                             #gastar menos timepo con los archivos large
     while pos1 < size:
-        minimum = pos1              # minimun tiene el menor elemento conocido hasta ese momento
+        minimum = pos1              
         pos2 = pos1 + 1
         while (pos2 <= lt.size(lst)):
             if (lessfunction (lt.getElement(lst, pos2),lt.getElement(lst, minimum),criteria)): 
@@ -141,9 +141,9 @@ def orderElementsByCriteria(function, column, lst, elements):
         print("Valor no valido para criterio de busqueda")
     lista=lt.newList("ARRAY_LIST")
     if function.lower()=="crecimiento":
-        selectionSort(lst,greater,column, int(elements))
+        selectionSort(lst,greater,column, (int(elements)+1))
     elif function.lower()=="decrecimiento":
-        selectionSort(lst,less,column, int(elements))
+        selectionSort(lst,less,column, (int(elements)+1))
     for i in range(1,(int(elements)+1)):
         lt.addLast(lista, lt.getElement(lst, i))
     return lista
