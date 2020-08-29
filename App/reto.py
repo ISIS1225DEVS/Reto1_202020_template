@@ -141,9 +141,9 @@ def orderElementsByCriteria(function, column, lst, elements):
         print("Valor no valido para criterio de busqueda")
     lista=lt.newList("ARRAY_LIST")
     if function.lower()=="crecimiento":
-        lista_ord=selectionSort(lst,greater,column, int(elements))
+        selectionSort(lst,greater,column, int(elements))
     elif function.lower()=="decrecimiento":
-        lista_ord=selectionSort(lst,less,column, int(elements))
+        selectionSort(lst,less,column, int(elements))
     for i in range(1,(int(elements)+1)):
         lt.addLast(lista, lt.getElement(lst, i))
     return lista
@@ -187,7 +187,6 @@ def main():
                         element = it.next(iterator)
                         print(str(i)+"- "+element["original_title"])
                         i += 1
-                    
             elif int(inputs[0])==3: #opcion 3
                 if lista_details==None or lista_details['size']==0: #obtener la longitud de la lista
                     print("La lista details esta vacía")  
