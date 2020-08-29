@@ -112,17 +112,21 @@ def countElementsByCriteria(criteria, lst1,lst2):
     lst = lt.newList()
     promedio=0
     ids=[]
+    if lst1["size"]>2001:
+        x='\ufeffid'        #Con la lista large carga '\ufeffid' en vez de "id"
+    else:
+        x="id"
 
     iterator = it.newIterator(lst1)
     while  it.hasNext(iterator):
         element = it.next(iterator)
         if criteria.lower() in element["director_name"].lower(): 
             ids.append(element["id"])
-    
+
     iterator = it.newIterator(lst2)
     while  it.hasNext(iterator):
         pelicula = it.next(iterator)
-        if pelicula["id"] in ids: 
+        if pelicula[x] in ids: 
             lt.addLast(lst,pelicula)
             promedio+=float(pelicula["vote_average"])
     promedio/=lst["size"]
@@ -140,9 +144,9 @@ def orderElementsByCriteria(function, column, lst, elements):
     else:
         print("Valor no valido para criterio de busqueda")
     lista=lt.newList("ARRAY_LIST")
-    if function.lower()=="crecimiento":
+    if function=="1":
         selectionSort(lst,greater,column, (int(elements)+1))
-    elif function.lower()=="decrecimiento":
+    elif function=="2":
         selectionSort(lst,less,column, (int(elements)+1))
     for i in range(1,(int(elements)+1)):
         lt.addLast(lista, lt.getElement(lst, i))
@@ -177,10 +181,10 @@ def main():
                     print("La lista casting esta vacía")    
                 else: 
                     criteria =input('Ingrese 1 si el criterio de busqueda es COUNT o ingrese 2 si es AVERAGE\n')
-                    crecimiento =input("¿Quiere la lista en crecimiento o decrecimiento?\n")
-                    tamaño =input("Ingrese cuantas posiciones quiere que tenga su lista\n")
+                    crecimiento =input("Ingrese 1 si quiere la lista de las 10 mejores películas, o 2 si quiere la lista de las 10 peores películas.\n")
+                    tamaño = 10
                     lista=orderElementsByCriteria(crecimiento,criteria,lista_details,tamaño)
-                    print ("La lista de peliculas solicitada es:")
+                    print ("La lista solicitada es:")
                     iterator = it.newIterator(lista)
                     i=1
                     while  it.hasNext(iterator):
