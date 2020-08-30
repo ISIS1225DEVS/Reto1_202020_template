@@ -62,7 +62,6 @@ def compareRecordIds (recordA, recordB):
     return -1
 
 
-
 def loadCSVFile (file, cmpfunction):
     lst=lt.newList("ARRAY_LIST", cmpfunction)
     dialect = csv.excel()
@@ -76,11 +75,16 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
-
-def loadMovies ():
+def loadMoviesDetails ():
     lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def loadMoviesCasting ():
+    lst = loadCSVFile("theMoviesdb/Casting.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
 
 
 def main():
@@ -99,8 +103,8 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
-
+                lstmoviesdetails = loadMoviesDetails()
+                lstmoviecasting = loadMoviesCasting()
             elif int(inputs[0])==2: #opcion 2
                 pass
 
