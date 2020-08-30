@@ -37,7 +37,6 @@ from DataStructures import liststructure as lt
 from time import process_time 
 
 
-
 def printMenu():
     """
     Imprime el menu de opciones
@@ -53,14 +52,12 @@ def printMenu():
 
 
 
-
 def compareRecordIds (recordA, recordB):
     if int(recordA['id']) == int(recordB['id']):
         return 0
     elif int(recordA['id']) > int(recordB['id']):
         return 1
     return -1
-
 
 
 def loadCSVFile (file, cmpfunction):
@@ -76,10 +73,8 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
-
 def loadMovies (file):
-    lst = loadCSVFile(file,compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    lst = loadCSVFile(file,compareRecordIds)
     return lst
 
 def less(element1, element2, criteria):
@@ -103,7 +98,6 @@ def selectionSort (lst, lessfunction, criteria,size):    #Se utiliza selection s
             pos2 += 1
         lt.exchange (lst, pos1, minimum)  # se intercambia el elemento más pequeño hasta ese punto con el elemento en pos1
         pos1 += 1
-
 
 def countElementsByCriteria(criteria, lst1,lst2):
     """
@@ -152,15 +146,49 @@ def orderElementsByCriteria(function, column, lst, elements):
         lt.addLast(lista, lt.getElement(lst, i))
     return lista
 
+def orderElementsByGenre(function, genre, column, lst, elements):
+    prom=0
+    lst_genres=elementsByGenres(genre,lst)
+    lista=lt.newList("ARRAY_LIST")
+    if column == "1":
+        column="vote_count"
+    elif column == "2":
+        column="vote_average"
+    else:
+        print("Valor no valido para criterio de busqueda")
+    if function=="1":
+        selectionSort(lst_genres,greater,column, (int(elements)+1))
+    elif function=="2":
+        selectionSort(lst_genres,less,column, (int(elements)+1))
+    else:
+        print("Valor no valido para criterio de busqueda")
+    for i in range(1,(int(elements)+1)):
+        lt.addLast(lista, lt.getElement(lst_genres, i))
+    
+    iterator = it.newIterator(lista)
+    while  it.hasNext(iterator):
+        pelicula = it.next(iterator)
+        lt.addLast(lst,pelicula)
+        prom+=float(pelicula[column])
+    prom/=elements
+    
+    return lista,prom
+
+def elementsByGenres(criteria,lst1):
+    lst=lt.newList('ARRAY_LIST')
+    iterator = it.newIterator(lst1)
+    while  it.hasNext(iterator):
+        element = it.next(iterator)
+        if criteria.lower() in element['genres'].lower():
+            lt.addLast(lst,element)
+    return lst
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
-
     Instancia una lista vacia en la cual se guardarán los datos cargados desde el archivo
     Args: None
     Return: None 
     """
-
 
 
     lista_casting = lt.newList()   # se require usar lista definida
@@ -170,8 +198,8 @@ def main():
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                lista_casting = loadMovies("Data/MoviesCastingRaw-small.csv") #llamar funcion cargar datos
-                lista_details = loadMovies("Data/SmallMoviesDetailsCleaned.csv")
+                lista_casting = loadMovies("Data/themoviesdb/MoviesCastingRaw-small.csv") #llamar funcion cargar datos
+                lista_details = loadMovies("Data/themoviesdb/SmallMoviesDetailsCleaned.csv")
                 print("Datos cargados en lista casting, ",lista_casting['size']," elementos cargados")
                 print("Datos cargados en lista details, ",lista_details['size']," elementos cargados")
             elif int(inputs[0])==2: #opcion 2
@@ -228,7 +256,19 @@ def main():
                 elif lista_casting==None or lista_casting['size']==0: #obtener la longitud de la lista
                     print("La lista casting esta vacía")
                 else:
-                    pass
+                    genre =input('Ingrese el genero que quiere buscar:\n')
+                    criteria =input('Ingrese 1 si el criterio de busqueda es COUNT o ingrese 2 si es AVERAGE\n')
+                    crecimiento =input("Ingrese 1 si quiere la lista de las 10 mejores películas, o 2 si quiere la lista de las 10 peores películas.\n")
+                    tamaño = 10
+                    lista,prom=orderElementsByGenre(crecimiento,genre,criteria,lista_details,tamaño)
+                    print ("La lista de las 10 peliculas  es:")
+                    iterator = it.newIterator(lista)
+                    i=1
+                    while  it.hasNext(iterator):
+                        element = it.next(iterator)
+                        print(str(i)+"- "+element["original_title"])
+                        i += 1
+                    print('El promedio del ranking es de: '+str(prom))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
                 
