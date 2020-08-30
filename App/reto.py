@@ -274,17 +274,30 @@ def rank_movies(function, lst_d, req_elements, algorithm, column):
         print(req_elements, 'best' if function == 'greater' else 'worst',
               'count:' if column == 'vote_count' else 'average:')
         show_movies(lt.subList(lst_d, 0, int(req_elements)), None)
+        print(get_average_count_points(lt.subList(lst_d, 0, int(req_elements))))
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
 
 def create_list_by_genres(lst_d, genres):
     iterator_movies = it.newIterator(lst_d)
     genres_movies = lt.newList('ARRAY_LIST')
+    for genre in genres:
+        while it.hasNext(iterator_movies):
+            movie = it.next(iterator_movies)
+            if genre.lower() in movie['genres'].lower():
+                lt.addLast(genres_movies, movie)
+    return genres_movies
+
+
+def get_average_count_points(movies):
+    iterator_movies, total_average, total_count = it.newIterator(movies), 0, 0
     while it.hasNext(iterator_movies):
         movie = it.next(iterator_movies)
-        if genres.lower() in movie['genres'].lower():
-            lt.addLast(genres_movies, movie)
-    return genres_movies
+        total_average += float(movie['vote_average'])
+        total_count += float(movie['vote_count'])
+    total_average /= lt.size(movies)
+    total_count /= lt.size(movies)
+    return f'\nVotaciones promedio del ranking: {total_count:.1f}\nPuntaje promedio del ranking: {total_average:.1f}\n'
 
 
 def rank_movies_on_genres(function, lst_d, req_elements, algorithm, column, genres):
@@ -301,19 +314,29 @@ def rank_movies_on_genres(function, lst_d, req_elements, algorithm, column, genr
         print(req_elements, 'best' if function == 'greater' else 'worst',
               'count:' if column == 'vote_count' else 'average:')
         show_movies(lt.subList(filtered, 0, int(req_elements)), None)
+        print(get_average_count_points(lt.subList(filtered, 0, int(req_elements))))
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
 
 def search_genres(lst_d):
-    genres = input('Ingrese el género a buscar: ')
+    genres = input('Ingrese el género a rankear. Si son varios, separe por comas: ')
+    genres = genres.replace(' ', '')
+    genres = genres.split(',')
+    found = False
     iterator_movies = it.newIterator(lst_d)
-    while it.hasNext(iterator_movies):
-        movie = it.next(iterator_movies)
-        if genres.lower() in movie['genres'].lower():
-            return genres
-        else:
-            print('El género no se encuentra. Intente de nuevo.')
-            return search_genres(lst_d)
+    for genre in genres:
+        while it.hasNext(iterator_movies):
+            movie = it.next(iterator_movies)
+            if genre.lower() in movie['genres'].lower():
+                found = True
+                break
+            else:
+                found = False
+    if found:
+        return genres
+    else:
+        print('Un género no se encuentra. Intente de nuevo.')
+        return search_genres(lst_d)
 
 
 def get_type_of_sorting():
