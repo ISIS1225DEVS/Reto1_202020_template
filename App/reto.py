@@ -86,7 +86,31 @@ def get_two_csv(file1,file2,list_type):
 
     return lst_movies
 
-def requerimiento_3(list,director_name):
+#ESTA ES LA FUNCIÓN PARA LA BÚSQUEDAD DEL DIRECTOR Y DE SUS PELÍCULAS BUENAS
+#REQUERIMIENTO 1
+
+def good_movies(lista,busqueda):
+#La x mas votadas
+    count=0
+    sum=0
+    recorrido=0
+    di=0
+    vot=1
+    try:
+        while recorrido <= lt.size(lista) :
+            if lt.getElement(lista,recorrido)[di]["director_name"] == busqueda:
+                vote= float(lt.getElement(lista,recorrido)[vot]['vote_average'])
+                if vote >= 6:
+                    count+=1
+                    sum+= vote
+            recorrido+=1
+        return((count,sum/count))
+    except:
+        print("El director no fue encontrado")
+    
+
+#REQUERIMIENTO 3
+def peliculas_de_un_director(list,director_name):
     size= lt.size(list)
     dirigidas= []
     numero= 0
@@ -147,9 +171,6 @@ def obtener_peliculas_menos_votadas (list, number):
         lt.addLast (peliculas_menos_votadas_descendente, tuple1)
         lt.removeLast(movies)
     return (peliculas_menos_votadas_descendente,peliculas_menos_votadas_ascendente)
-    
-
-
 
 def lista_ordenada_vote_averange(list):
     list_type='SINGLE_LINKED'
@@ -212,11 +233,17 @@ def main():
 
             elif int(inputs[0])==2: #opcion 2
                 pass
+                
+                dir= input('Ingrese el nombre del Director: ')
+                peliculas= good_movies(lst_movies_array_list,dir)
+                print("De el director "+ dir + " se encontraron " + str(peliculas[0]) + " peliculas buenas. El promedio de la puntuación de estas películas es: " + str(peliculas[1]))
 
             elif int(inputs[0])==3: #opcion 3
                 pass
                 dir= input('Ingrese el nombre del Director: ')
-                requerimiento_3(lst_movies_array_list,dir)
+
+                peliculas_de_un_director(lst_movies_array_list,dir)
+                
 
             elif int(inputs[0])==4: #opcion 4
                 pass
