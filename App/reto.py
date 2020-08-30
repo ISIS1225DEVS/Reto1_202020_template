@@ -81,6 +81,76 @@ def loadMovies ():
     lst = loadCSVFile("themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def comparacion_promedio_mayor(elemento1,elemento2):
+    return elemento1[1]["Promedio"]>elemento2[1]["Promedio"]
+
+def comparacion_promedio_menor(elemento1,elemento2):
+    return elemento1[1]["Promedio"]<elemento2[1]["Promedio"]
+
+def comparacion_contar_mayor(elemento1,elemento2):
+    return elemento1[1]["Votos"]>elemento2[1]["Votos"]
+
+def comparacion_contar_menor(elemento1,elemento2):
+    return elemento1[1]["Votos"]<elemento2[1]["Votos"]
+
+
+def Requerimiento2(numero, parametro, orden,lista):
+    lista_retorno=lt.newList(datastructure="SINGLE_LINKED")
+    contador1=0
+    peliculas=[]
+    while contador1<numero:
+        mayor=0
+        menor=99999999999
+        titulo=""
+        if parametro=="promedio" and orden=="mayor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_average"])>mayor and actual["title"] not in peliculas:
+                        mayor=float(actual["vote_average"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Promedio":mayor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="contar" and orden=="mayor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_count"])>mayor and actual["title"] not in peliculas:
+                        mayor=float(actual["vote_count"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Votos":mayor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="promedio" and orden=="menor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_average"])<menor and actual["title"] not in peliculas:
+                        menor=float(actual["vote_average"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Promedio":menor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="contar" and orden=="menor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_count"])<menor and actual["title"] not in peliculas:
+                        menor=float(actual["vote_count"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Votos":menor}])
+            peliculas.append(titulo)
+            contador1+=1
+
+    if parametro=="promedio" and orden=="mayor":
+        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+    if parametro=="promedio" and orden=="menor":
+        lt.insertion(lista_retorno,comparacion_promedio_menor)
+    if parametro=="contar" and orden=="mayor":
+        lt.insertion(lista_retorno,comparacion_contar_mayor)
+    if parametro=="contar" and orden=="menor":
+        lt.insertion(lista_retorno,comparacion_contar_menor)
+
+    return print(lista_retorno)
+
 def req3 (criteria,column,lst,lst1):
     if lst["type"]=="SINGLE_LINKED":
         t1_start = process_time()
@@ -168,6 +238,62 @@ def req5(criteria,lst):
     return(dic)
                 
 
+def Requerimiento6(numero, parametro, genero, orden,lista):
+    lista_retorno=lt.newList(datastructure="SINGLE_LINKED")
+    contador1=0
+    peliculas=[]
+    while contador1<numero:
+        mayor=0
+        menor=99999999999
+        titulo=""
+        if parametro=="promedio" and orden=="mayor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_average"])>mayor and actual["title"] not in peliculas and genero in actual["genres"]:
+                        mayor=float(actual["vote_average"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Promedio":mayor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="contar" and orden=="mayor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_count"])>mayor and actual["title"] not in peliculas and genero in actual["genres"]:
+                        mayor=float(actual["vote_count"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Votos":mayor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="promedio" and orden=="menor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_average"])<menor and actual["title"] not in peliculas and genero in actual["genres"]:
+                        menor=float(actual["vote_average"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Promedio":menor}])
+            peliculas.append(titulo)
+            contador1+=1
+        if parametro=="contar" and orden=="menor":
+            for i in range(1,lt.size(lista)):
+                actual=lt.getElement(lista,i)
+                if float(actual["vote_count"])<menor and actual["title"] not in peliculas and genero in actual["genres"]:
+                        menor=float(actual["vote_count"])
+                        titulo=actual["title"]
+            lt.addFirst(lista_retorno,[{"Película":titulo},{"Votos":menor}])
+            peliculas.append(titulo)
+            contador1+=1
+
+    if parametro=="promedio" and orden=="mayor":
+        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+    if parametro=="promedio" and orden=="menor":
+        lt.insertion(lista_retorno,comparacion_promedio_menor)
+    if parametro=="contar" and orden=="mayor":
+        lt.insertion(lista_retorno,comparacion_contar_mayor)
+    if parametro=="contar" and orden=="menor":
+        lt.insertion(lista_retorno,comparacion_contar_menor)
+     
+    return print(lista_retorno)
+
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -185,12 +311,17 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
-                
-                
+                lstmovies = loadMovies()  
 
             elif int(inputs[0])==2: #opcion 2
-                pass
+                if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
+                    print("La lista esta vacía")
+                else:
+                    n1=int(input("Número de peliculas"))
+                    p1=input("contar o promedio")
+                    o1=input("mayor o menor")
+                    Requerimiento2(n1,p1,o1,lstmovies)
+
 
             elif int(inputs[0])==3: #opcion 3
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
@@ -221,7 +352,14 @@ def main():
                 
 
             elif int(inputs[0])==6: #opcion 6
-                pass
+                if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
+                    print("La lista esta vacía")
+                else:
+                    n2=int(input("Número de peliculas"))
+                    p2=input("contar o promedio")
+                    o2=input("mayor o menor")
+                    gen=input("Género?, (primera letra en mayúscula)")
+                    Requerimiento6(n2,p2,gen,o2,lstmovies)                
 
 
             elif int(inputs[0])==0: #opcion 0, salir
@@ -229,3 +367,6 @@ def main():
                 
 if __name__ == "__main__":
     main()
+
+
+
