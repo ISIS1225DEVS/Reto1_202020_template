@@ -343,3 +343,7 @@ def subList (lst, pos, numelem):
         error.reraise (exp, 'List->subList: ')
 
 
+from Sorting import insertionsort as comp_ins
+
+def insertion(lista,comp_f):
+    comp_ins.insertionSort(lista,comp_f)
