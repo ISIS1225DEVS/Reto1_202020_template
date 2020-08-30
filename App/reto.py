@@ -140,6 +140,20 @@ def get_actor_name_id(search, result, actor):
         elif actor.lower() in element['actor5_name'].lower():
             lt.addLast(result,element['id'])
 
+def get_actor_director(search, result, actor):
+    iterator = it.newIterator(search)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        if actor.lower() in element['actor1_name'].lower():
+            lt.addLast(result,element['director_name'])
+        elif actor.lower() in element['actor2_name'].lower():
+            lt.addLast(result,element['director_name'])
+        elif actor.lower() in element['actor3_name'].lower():
+            lt.addLast(result,element['director_name'])
+        elif actor.lower() in element['actor4_name'].lower():
+            lt.addLast(result,element['director_name'])
+        elif actor.lower() in element['actor5_name'].lower():
+            lt.addLast(result,element['director_name'])
        
 def movies_total_average(movies):
     iterator = it.newIterator(movies)
@@ -241,6 +255,15 @@ def actor_movies(movies,actor):
                     '\n con un puntaje promedio de', element['vote_average'],
                     'y un total de', element['vote_count'], 'votaciones')
 
+def filtro_directores(lista_dct):
+    lista_directores = []
+    for i in range(0,lista_dct['size']):
+        if lista_dct['elements'][i] not in lista_directores:
+            lista_directores.append(lista_dct['elements'][i])
+    print(lista_directores)
+    return lista_directores
+        
+
 def know_actor(actor, lst_movies, lst_casting):
     if len(lst_movies) == 0:
         print('Las listas están vacías')
@@ -248,9 +271,12 @@ def know_actor(actor, lst_movies, lst_casting):
     else:
         t1_start = process_time()
         peliculas_actor = lt.newList('ARRAY_LIST')
-        movies_data = lt.newList('ARRAY_LIST') 
+        movies_data = lt.newList('ARRAY_LIST')
+        director = lt.newList('ARRAY_LIST')
         get_actor_name_id(lst_casting,peliculas_actor,actor)
+        get_actor_director(lst_casting,director,actor)
         iterator_id = it.newIterator(peliculas_actor)
+        iterator_id_2 = it.newIterator(director)
         while it.hasNext(iterator_id):
             movie_id = it.next(iterator_id)
             iterator_movies = it.newIterator(lst_movies)
@@ -258,11 +284,16 @@ def know_actor(actor, lst_movies, lst_casting):
                 movie =it.next(iterator_movies)
                 if movie_id == movie['id']:
                     lt.addLast(movies_data,movie)
+        
+        print(type(director['elements']))
+
+        filtro_directores(director)
         actor_movies(movies_data, actor)
         total_vote_average = movies_total_average(movies_data)
         t1_stop = process_time()
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
         return movies_data['size'], total_vote_average
+
 
 def less_average(element1, element2):
     if float(element1['vote_average']) < float(element2['vote_average']):
