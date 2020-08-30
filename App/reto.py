@@ -113,6 +113,9 @@ def conocer_director (director:str, casting:list, details:list)->list:
     details_pelis= lt.newList('SINGLE_LINKED', None)
     pelis_por_director = lt.newList('SINGLE_LINKED', None)
 
+    
+    t1_start = process_time()
+
     iter_casting = it.newIterator(casting)
     while it.hasNext(iter_casting):
         c = it.next(iter_casting)
@@ -148,8 +151,11 @@ def conocer_director (director:str, casting:list, details:list)->list:
     if(numero_de_peliculas_director > 0):
         promedio_peliculas = suma_vote_average/numero_de_peliculas_director
         print("Numero de peliculas: "+ str(numero_de_peliculas_director)+"\n"+ \
-            "Promedio peliculas (vote_average): "+ str(promedio_peliculas))
-   
+            "Promedio peliculas (vote_average): "+ str(promedio_peliculas)+"\n")
+    
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos") 
+
     
     return ()
 
@@ -157,6 +163,8 @@ def conocer_actor (actor:str, casting:list, details:list)->list:
     
     details_pelis= lt.newList('SINGLE_LINKED', None)
     pelis_por_actor = lt.newList('SINGLE_LINKED', None)
+
+    t1_start = process_time()
 
     iter_casting = it.newIterator(casting)
     while it.hasNext(iter_casting):
@@ -207,8 +215,11 @@ def conocer_actor (actor:str, casting:list, details:list)->list:
         promedio_peliculas = suma_vote_average/numero_de_peliculas_actor
         print("Numero de peliculas: "+ str(numero_de_peliculas_actor)+"\n"+ \
             "Promedio peliculas (vote_average): "+ str(promedio_peliculas)+"\n"+\
-                "Director con más colaboraciones: "+ str(director_mas_colaboraciones))
+                "Director con más colaboraciones: "+ str(director_mas_colaboraciones)+"\n")
     
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos") 
+
     return ()
 
 def main():
