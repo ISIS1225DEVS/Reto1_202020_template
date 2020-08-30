@@ -90,6 +90,7 @@ def conocer_a_un_director(lstmoviescasting:list, lstmoviesdetails:list, d_name:s
     num=0
     vote=0
     i=0
+    t1_start = process_time()
     while i < len(lstmoviescasting):
         if lstmoviescasting[i]["director_name"]==d_name:
            num+=1
@@ -97,9 +98,11 @@ def conocer_a_un_director(lstmoviescasting:list, lstmoviesdetails:list, d_name:s
            pelis.append(lstmoviesdetails[i]["title"])
         i+=1
     prom=(vote/num)
+    t1_stop = process_time
+    print('El tiempo de ejecucion fue de', t1_stop-t1_start, 'segundos')
     return (pelis, num, prom)
 
- def ejecutar_conocer_a_un_director(lstmoviescasting:list, lstmoviesdetails:list)->None:
+def ejecutar_conocer_a_un_director(lstmoviescasting:list, lstmoviesdetails:list):
      d_name = input("Ingrese el nombre del director que quiere conocer: ")
      x=conocer_a_un_director(lstcasting,lstdetails,d_name)
      print(x)          
