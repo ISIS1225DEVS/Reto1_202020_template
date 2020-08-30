@@ -164,12 +164,7 @@ def orderElementsByGenre(function, genre, column, lst, elements):
         print("Valor no valido para criterio de busqueda")
     for i in range(1,(int(elements)+1)):
         lt.addLast(lista, lt.getElement(lst_genres, i))
-    
-    iterator = it.newIterator(lista)
-    while  it.hasNext(iterator):
-        pelicula = it.next(iterator)
-        lt.addLast(lst,pelicula)
-        prom+=float(pelicula[column])
+        prom+=float(lt.getElement(lst_genres, i)[column])
     prom/=elements
     
     return lista,prom
@@ -182,6 +177,7 @@ def elementsByGenres(criteria,lst1):
         if criteria.lower() in element['genres'].lower():
             lt.addLast(lst,element)
     return lst
+   
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
