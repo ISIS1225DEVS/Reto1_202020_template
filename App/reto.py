@@ -23,7 +23,8 @@
  """
 
 """
-  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
+  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos,
+   y hacer búsquedas sobre una lista .
 """
 
 import config as cf
@@ -49,6 +50,7 @@ def print_menu():
     print('4- Consultar buenas películas de un director')
     print('5- Ordenar películas por votos')
     print('6- Conocer a un director y todas sus películas')
+    print('7- Ranking de un género cinematográfico')
     print('0- Salir')
 
 
@@ -105,14 +107,14 @@ def count_director_movies(director, column, lst):
         print('La lista esta vacía')
         return 0
     else:
-        t1_start = process_time()  # tiempo inicial
+        t1_start = process_time()  # Start time.
         counter = 0
         iterator = it.newIterator(lst)
         while it.hasNext(iterator):
             element = it.next(iterator)
             if director.lower() in element[column].lower():  # filtrar por palabra clave
                 counter += 1
-        t1_stop = process_time()  # tiempo final
+        t1_stop = process_time()  # Final time.
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
     return counter
 
@@ -143,7 +145,7 @@ def find_good_movies(director, vote_average, lst_d, lst_c):
         print('Las listas están vacías')
         return 0, 0
     else:
-        t1_start = process_time()  # tiempo inicial
+        t1_start = process_time()  # Start time.
         all_director_movies, good_movies = (lt.newList('ARRAY_LIST') for _ in range(2))
         # Search all director movie ids and add them to a list.
         get_director_movie_ids(lst_c, all_director_movies, director)
@@ -161,7 +163,7 @@ def find_good_movies(director, vote_average, lst_d, lst_c):
         show_movies(good_movies, director)
         # Calculate number of good movies and total vote average of director.
         total_vote_average = movies_total_average(good_movies)
-        t1_stop = process_time()  # tiempo final
+        t1_stop = process_time()  # Final time.
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
     return good_movies['size'], total_vote_average
 
@@ -174,7 +176,7 @@ def know_director(director, lst_d, lst_c):
         print('Las listas están vacías')
         return 0, 0
     else:
-        t1_start = process_time()  # tiempo inicial
+        t1_start = process_time()  # Start time.
         all_director_movies, movies_data = (lt.newList('ARRAY_LIST') for _ in range(2))
         # Search all director movie ids and add them to a list.
         get_director_movie_ids(lst_c, all_director_movies, director)
@@ -190,7 +192,7 @@ def know_director(director, lst_d, lst_c):
         show_movies(movies_data, director)
         # Calculate number of movies and total vote average of director.
         total_vote_average = movies_total_average(movies_data)
-        t1_stop = process_time()  # tiempo final
+        t1_stop = process_time()  # Final time.
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
     return movies_data['size'], total_vote_average
 
@@ -235,41 +237,119 @@ def greater_count(element1, element2):
     return False
 
 
-def order_movies(function, lst_d, req_elements, algorithm, column):
+def sort_movies(algorithm, function, lst_d, column):
+    if algorithm == 'selection':
+        if function == 'less':
+            selection.selectionSort(lst_d, less_count) if column == 'vote_count' \
+                else selection.selectionSort(lst_d, less_average)
+        elif function == 'greater':
+            selection.selectionSort(lst_d, greater_count) if column == 'vote_count' \
+                else selection.selectionSort(lst_d, greater_average)
+    elif algorithm == 'shell':
+        if function == 'less':
+            shell.shellSort(lst_d, less_count) if column == 'vote_count' \
+                else shell.shellSort(lst_d, less_average)
+        elif function == 'greater':
+            shell.shellSort(lst_d, greater_count) if column == 'vote_count' \
+                else shell.shellSort(lst_d, greater_average)
+    elif algorithm == 'insertion':
+        if function == 'less':
+            insertion.insertionSort(lst_d, less_count) if column == 'vote_count' \
+                else insertion.insertionSort(lst_d, less_average)
+        elif function == 'greater':
+            insertion.insertionSort(lst_d, greater_count) if column == 'vote_count' \
+                else insertion.insertionSort(lst_d, greater_average)
+
+
+def rank_movies(function, lst_d, req_elements, algorithm, column):
     """
     Retorna una lista con cierta cantidad de elementos ordenados por el criterio
     """
     if len(lst_d) == 0:
         print('Las listas están vacías')
     else:
-        t1_start = process_time()  # tiempo inicial
-        # Sort movies.
-        if algorithm == 'selection':
-            if function == 'less':
-                selection.selectionSort(lst_d, less_count) if column == 'vote_count' \
-                    else selection.selectionSort(lst_d, less_average)
-            elif function == 'greater':
-                selection.selectionSort(lst_d, greater_count) if column == 'vote_count' \
-                    else selection.selectionSort(lst_d, greater_average)
-        elif algorithm == 'shell':
-            if function == 'less':
-                shell.shellSort(lst_d, less_count) if column == 'vote_count' \
-                    else shell.shellSort(lst_d, less_average)
-            elif function == 'greater':
-                shell.shellSort(lst_d, greater_count) if column == 'vote_count' \
-                    else shell.shellSort(lst_d, greater_average)
-        elif algorithm == 'insertion':
-            if function == 'less':
-                insertion.insertionSort(lst_d, less_count) if column == 'vote_count' \
-                    else insertion.insertionSort(lst_d, less_average)
-            elif function == 'greater':
-                insertion.insertionSort(lst_d, greater_count) if column == 'vote_count' \
-                    else insertion.insertionSort(lst_d, greater_average)
-        t1_stop = process_time()  # tiempo final
+        t1_start = process_time()  # Start time.
+        sort_movies(algorithm, function, lst_d, column)
+        t1_stop = process_time()  # Final time.
         print(req_elements, 'best' if function == 'greater' else 'worst',
               'count:' if column == 'vote_count' else 'average:')
         show_movies(lt.subList(lst_d, 0, int(req_elements)), None)
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
+
+def create_list_by_genres(lst_d, genres):
+    iterator_movies = it.newIterator(lst_d)
+    genres_movies = lt.newList('ARRAY_LIST')
+    while it.hasNext(iterator_movies):
+        movie = it.next(iterator_movies)
+        if genres.lower() in movie['genres'].lower():
+            lt.addLast(genres_movies, movie)
+    return genres_movies
+
+
+def rank_movies_on_genres(function, lst_d, req_elements, algorithm, column, genres):
+    """
+    Retorna una lista con cierta cantidad de elementos ordenados por el criterio
+    """
+    if len(lst_d) == 0:
+        print('Las listas están vacías')
+    else:
+        t1_start = process_time()  # Start time.
+        filtered = create_list_by_genres(lst_d, genres)
+        sort_movies(algorithm, function, filtered, column)
+        t1_stop = process_time()  # Final time.
+        print(req_elements, 'best' if function == 'greater' else 'worst',
+              'count:' if column == 'vote_count' else 'average:')
+        show_movies(lt.subList(filtered, 0, int(req_elements)), None)
+        print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+
+
+def search_genres(lst_d):
+    genres = input('Ingrese el género a buscar: ')
+    iterator_movies = it.newIterator(lst_d)
+    while it.hasNext(iterator_movies):
+        movie = it.next(iterator_movies)
+        if genres.lower() in movie['genres'].lower():
+            return genres
+        else:
+            print('El género no se encuentra. Intente de nuevo.')
+            return search_genres(lst_d)
+
+
+def get_type_of_sorting():
+    algorithm = input('\nIngrese 1 para ordenar con selection sorting\n'
+                      'o 2 para ordenar con shell sorting\n'
+                      'o 3 para ordenar con insertion sorting: ')
+    if algorithm == '1':
+        return 'selection'
+    elif algorithm == '2':
+        return 'shell'
+    elif algorithm == '3':
+        return 'insertion'
+
+
+def get_vote_criteria():
+    column = input('\nIngrese 1 para ordenar por cantidad de votos\n'
+                   'o 2 para ordenar por calificación promedio: ')
+    if column == '1':
+        return 'vote_count'
+    elif column == '2':
+        return 'vote_average'
+
+
+def get_sorting_direction():
+    function = input('\nIngrese 1 para orden descendente\no 2 para ascendente: ')
+    if function == '1':
+        return 'greater'
+    elif function == '2':
+        return 'less'
+
+
+def get_required_movies():
+    req = input('Ingrese el número de películas requeridas en el ranking: ')
+    while int(req) < 10:
+        req = input('Ingrese por lo menos 10 películas requeridas: ')
+    return req
 
 
 def main():
@@ -308,39 +388,24 @@ def main():
                 print('Las buenas películas de este director tienen un promedio de votación de', average, 'puntos.')
             elif int(inputs[0]) == 5:  # opcion 5
                 print('Ranking de películas')
-                req = input('Ingrese el número de películas requeridas: ')
-                while int(req) < 10:
-                    req = input('Ingrese por lo menos 10 películas requeridas: ')
-                # Sorting direction.
-                function = input('\nIngrese 1 para orden descendente\no 2 para ascendente: ')
-                if function == '1':
-                    function = 'greater'
-                elif function == '2':
-                    function = 'less'
-                # Column criteria for sorting.
-                column = input('\nIngrese 1 para ordenar por cantidad de votos\n'
-                               'o 2 para ordenar por calificación promedio: ')
-                if column == '1':
-                    column = 'vote_count'
-                elif column == '2':
-                    column = 'vote_average'
-                # Type of sorting.
-                algorithm = input('\nIngrese 1 para ordenar con selection sorting\n'
-                                  'o 2 para ordenar con shell sorting\n'
-                                  'o 3 para ordenar con insertion sorting: ')
-                if algorithm == '1':
-                    algorithm = 'selection'
-                elif algorithm == '2':
-                    algorithm = 'shell'
-                elif algorithm == '3':
-                    algorithm = 'insertion'
-                # Show results.
-                order_movies(function, details_list, req, algorithm, column)
+                req = get_required_movies()
+                function = get_sorting_direction()  # Sorting direction.
+                column = get_vote_criteria()  # Column criteria for sorting.
+                algorithm = get_type_of_sorting()  # Type of sorting.
+                rank_movies(function, details_list, req, algorithm, column)  # Show results.
             elif int(inputs[0]) == 6:  # opcion 6
                 director = input('Ingrese el nombre del director para conocer su trabajo:\n')
                 counter, average = know_director(director, details_list, casting_list)
                 print('Existen', counter, 'películas del director', director, 'en el catálogo')
                 print('Las películas de este director tienen un promedio de votación de', average, 'puntos.')
+            elif int(inputs[0]) == 7:  # opcion 7
+                print('Ranking de películas en un género')
+                req = get_required_movies()
+                genres = search_genres(details_list)  # genres name to search.
+                column = get_vote_criteria()  # Column criteria for sorting.
+                function = get_sorting_direction()  # Sorting direction.
+                algorithm = get_type_of_sorting()  # Type of sorting.
+                rank_movies_on_genres(function, details_list, req, algorithm, column, genres)  # Show results.
             elif int(inputs[0]) == 0:  # opcion 0, salir
                 sys.exit(0)
 
