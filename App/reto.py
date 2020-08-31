@@ -36,6 +36,7 @@ from Sorting import shellsort as shell
 from Sorting import selectionsort as selection
 from Sorting import insertionsort as insertion
 from time import process_time
+from statistics import mean
 
 
 def print_menu():
@@ -271,6 +272,30 @@ def order_movies(function, lst_d, req_elements, algorithm, column):
         show_movies(lt.subList(lst_d, 0, int(req_elements)), None)
         print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
 
+
+
+def understand_genre(genres, lst_d, movies): 
+    if len(lst_d) == 0:
+        print('Las listas están vacías')
+    else:
+        t1_start = process_time()  # tiempo inicial
+        iterator_movies = it.newIterator(lst_d)
+        genres_movies = lt.newList('ARRAY_LIST')
+        count = 0
+        votes_sum = 0
+        for genre in genres:
+            while it.hasNext(iterator_movies):
+                movie = it.next(iterator_movies)
+                if genre.lower() in movie['genres'].lower():
+                    lt.addLast(genres_movies, movie)
+                    counter += 1
+                    while it.hasNext(iterator_movies):
+                        element = it.next(iterator_movies)
+                        votes_sum += float(element['vote_average'])
+                        total_vote_average = votes_sum / movies['size']
+        t1_stop = process_time()  # tiempo final
+        print('Tiempo de ejecución ', t1_stop - t1_start, ' segundos')
+        return(iterator_movies, counter, round(total_vote_average, 1))
 
 def main():
     """
