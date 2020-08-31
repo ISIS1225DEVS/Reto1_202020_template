@@ -44,11 +44,11 @@ def printMenu():
     """
     print("\nBienvenido")
     print("1- Cargar Datos")
-    print("2- Mejores peliculas de un director")
-    print("3- Conocer un director")
-    print("4- Conocer un actor")
-    print("5- Entender un genero")
-    print("6- Crear ranking")
+    print("2- Mejores peliculas de un director")#requerimiento 1
+    print("3- Conocer un director") #requerimiento 3
+    print("4- Conocer un actor")#requerimiento 4
+    print("5- Entender un genero")#requerimiento 6
+    print("6- Crear ranking")#requerimiento 2
     print("0- Salir")
 
 
@@ -87,7 +87,7 @@ def get_two_csv(file1,file2,list_type):
     return lst_movies
 
 #ESTA ES LA FUNCIÓN PARA LA BÚSQUEDAD DEL DIRECTOR Y DE SUS PELÍCULAS BUENAS
-#REQUERIMIENTO 1
+#REQUERIMIENTO 1 #opcion 2 del menu
 
 def good_movies(lista,busqueda):
 #La x mas votadas
