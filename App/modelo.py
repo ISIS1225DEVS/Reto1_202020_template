@@ -37,7 +37,7 @@ def nuevoDirector(nombre):
     """
     Diccionario con nombre de director, lista con nombres de sus de peliculas y promedio de rating
     """
-    director={"nombre": "","ref_peliculas":None, "puntaje_total":0, "puntaje_promedio":0 }
+    director={"nombre": "","ref_peliculas":None, "puntaje_total":0.0}
     director["nombre"]=nombre
     director["ref_peliculas"]=lt.newList('SINGLE_LINKED',compIDpelicula)
     return director
@@ -71,6 +71,7 @@ def agregarApuntador (catalogo, ID, pelicula_1):
         Identidad=lt.getElement(peliculas, posibleID)
     else:
         Identidad=nuevaEntradaPelicula(ID)
+        lt.addLast(peliculas, Identidad)
     lt.addLast(Identidad["pelicula"], pelicula_1)
 
 def agregarDirector(catalogo, nombreDirector, ID_pelicula):
@@ -83,7 +84,10 @@ def agregarDirector(catalogo, nombreDirector, ID_pelicula):
         director=lt.getElement(directores, posibleDirector)
     else:
         director=nuevoDirector(nombreDirector)
-    lt.addLast(director["ID_peliculas"],ID_pelicula)
+        lt.addLast(directores, director)
+    lt.addLast(director["ref_peliculas"],ID_pelicula)
+    director["puntaje_total"]+=float(ID_pelicula["pelicula"]["vote_average"])
+
     
 
 
@@ -91,8 +95,26 @@ def agregarDirector(catalogo, nombreDirector, ID_pelicula):
 #   funciones de consulta
 #==================================================
 
+def directorAverage(catalogo, nombreDirector):
+    directores= catalogo["directores"]
+    posibleDirector= lt.isPresent(directores, nombreDirector)
+    if posibleDirector > 0:
+        director=lt.getElement(directores, posibleDirector)
+    else:
+        print("error, no encontro director")
+    
+    promedio=director["puntaje_total"]/lt.size(director["ref_peliculas"])
 
+    return promedio
 
+def obtenerPeliculasDirector(catalogo, nombreDirector):
+
+    posiciondirector=lt.isPresent(catalogo["director"], nombreDirector)
+
+    if posiciondirector >0:
+        infodirector= lt.getElement(catalogo["director"],posiciondirector)
+        return infodirector
+    return None
 
 
 

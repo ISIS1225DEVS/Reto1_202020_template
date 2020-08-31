@@ -43,7 +43,31 @@ from time import process_time
 archivoPeliculas="theMoviesdb/SmallMoviesDetailsCleaned.csv"
 archivoCasting="theMoviesdb/MovieCastingRaw-small.csv"
 
+#==========================
+#     funciones print
+#==========================
 
+def printDatosDirector(director, puntaje):
+    """
+    Imprime datos directo particular
+    """
+    if director:
+        print("Director encontrado: " + director["nombre"])
+        print("Promedio" + puntaje)
+        print("Total peliculas"+ str(lt.size(director["ref_peliculas"])
+        lineaPelicula = (director["ref_peliculas"]["pelicula"])
+        iterator = it.newIterator(lineaPelicula)
+        while it.hasNext(iterator):
+            pelicula=it.next(iterator)
+            print("Titulo: "+ pelicula["original_title"])
+    else:
+        print("No encontro director")
+
+
+
+#==========================
+#     menu principal
+#==========================
 
 
 def printMenu():
@@ -58,46 +82,6 @@ def printMenu():
     print("5- Entender un genero")
     print("6- Crear ranking")
     print("0- Salir")
-
-
-
-
-def compareRecordIds (recordA, recordB):
-    if int(recordA['id']) == int(recordB['id']):
-        return 0
-    elif int(recordA['id']) > int(recordB['id']):
-        return 1
-    return -1
-
-
-
-def loadCSVFile (file, cmpfunction):
-    lst=lt.newList("ARRAY_LIST", cmpfunction)
-    dialect = csv.excel()
-    dialect.delimiter=";"
-    try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                lt.addLast(lst,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return lst
-
-
-def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-    return lst
-
-def loadCasting ():
-    lst = loadCSVFile("theMoviesdb/MovieCastingRaw-small.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-    return lst
-
-#==========================
-#     menu principal
-#==========================
 
 
 
@@ -117,13 +101,19 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
+                print("Iniciando catalogo")
+                cont=controlador.iniciarCatalogo()
+                print("Cargando datos")
+                controlador.cargarDatos(cont, archivoPeliculas, archivoCasting)
 
             elif int(inputs[0])==2: #opcion 2
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                nombreDirector = intput("Ingrese nombre director")
+                infoDirector=controlador.obtenerPeliculasPorDirector(cont, nombreDirector)
+                puntaje= controlador.promedioDirector(cont, nombreDirector)
+                printDatosDirector(infoDirector, puntaje)
 
             elif int(inputs[0])==4: #opcion 4
                 pass

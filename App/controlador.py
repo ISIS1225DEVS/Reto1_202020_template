@@ -52,7 +52,7 @@ def loadMovies ():
     return lst
 
 def loadCasting ():
-    lst = loadCSVFile("theMoviesdb/MovieCastingRaw-small.csv",compareRecordIds) 
+    lst = loadCSVFile(archivoCasting ,compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
@@ -62,28 +62,53 @@ def cargarDatos(catalogo, archivoPeliculas, archivoCasting):
     Carga datos desde archivos csv al modelo
     """
     cargarPeliculas_1(catalogo, archivoPeliculas)
-    cargarPeliculas_2(catalogo, archivoCasting)
     cargarDirectores(catalogo, archivoCasting)
-    cargarGeneros(catalogo, archivoPeliculas)
 
 def cargarPeliculas_1(catalogo, archivoPeliculas):
     """
     Carga datos de peliculas al catalogo bajo la lista de peliculas_1
+    Crea apuntador que relaciona ID con datos de pelicula
     """
     archivo=loadMovies()
     for pelicula in archivo:
         modelo.agregarPelicula_1(catalogo, pelicula)
+        ID=pelicula["id"]
+        modelo.agregarApuntador(catalogo, ID, pelicula)
 
-def cargarPeliculas_2(catalogo, archivoCasting):
+def cargarDirectores(catalogo, archivoCasting):
     """
-    Carga datos de peliculas al catalogo bajo la lista de peliculas_2
+    Carga director al catalogo
     """
     archivo=loadCasting()
     for pelicula in archivo:
-        modelo.agregarPelicula_2(catalogo, pelicula)
-        director= pelicula["director_name"]    #se obtiene director de cada pelicula
-        ID= pelicula["id"]
-        modelo.agregarDirector(catalogo, nombreDirector, ID)
+        nombreDirector= pelicula["director_name"]    #se obtiene director de cada pelicula
+        ref= pelicula["id"]                     #se obtiene id de cada peilcula en casting
+        ids=catalogo["apuntadorSegunId"]        #obtiene lista de ids de catalogo
+        pos=lt.isPresent(ids, ref)              #compara si la referencia se encuentra en el catalogo
+        if pos >0:
+            apuntador=lt.getElement(ids, pos)       #linea datos pelicula
+        else:
+            print("error")
+
+        modelo.agregarDirector(catalogo, nombreDirector, apuntador)
 
 
+#==============================
+#     Funciones para consultas
+#==============================
+
+def obtenerPeliculasPorDirector(catalogo, nombreDirector):
+    """
+    retorna peliculas de un director
+    """
+    infoDirector=modelo.obtenerPeliculasDirector(catalogo, nombreDirector)
+    return infoDirector
+
+def promedioDirector(catalogo, nombreDirector):
+    """
+    retorno puntaje promedio de un director
+    """
+
+    puntaje=modelo.directorAverage(catalogo, nombreDirector)
+    return puntaje
 
