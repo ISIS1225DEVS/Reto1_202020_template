@@ -29,6 +29,7 @@
 import config as cf
 import sys
 import csv
+import copy
 
 from ADT import list as lt
 from DataStructures import listiterator as it
@@ -187,7 +188,7 @@ def main():
                         if (TipoDeOrdenamiento!="ASCENDENTE" and TipoDeOrdenamiento!="DESCENDENTE"):
                             print("Error, se eligio un tipo de ordenamiento distinto a ascendente o descendente")
                             raise NameError('')
-                        tupla = CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmoviesdetails)
+                        tupla = CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,copy.deepcopy(lstmoviesdetails))
                         IteradorImprimir=it.newIterator(tupla)
                         print("\n" + "A continuacion, las mejores " + str(NPeliculasRanking) + " peliculas por " + Criterio.lower() + ", en orden " + TipoDeOrdenamiento.lower())
                         print("-------------------------------------------------------------------------------------")
@@ -203,13 +204,12 @@ def main():
                                 print((elemento[0]),end=" "*(70-len(elemento[0])))
                                 print(elemento[1])
                                 c+=1
-                        lstmoviesdetails = loadMovies("details",True)
                     except: print("ERROR")                  
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
             elif int(inputs[0])==3: #opcion 3 
                 if lt.size(lstmoviescasting)>1:
                     nombredirector=input("Por favor ingrese el nombre del director: ")
-                    tripla = ConocerAUnDirector(nombredirector,lstmoviescasting,lstmoviesdetails)
+                    tripla = ConocerAUnDirector(nombredirector,copy.deepcopy(lstmoviescasting),copy.deepcopy(lstmoviesdetails))
                     nombreano = tripla[0]
                     IterableNombreAno = it.newIterator(nombreano)
                     print("\n" + "---------------------------------------------------------------")
@@ -220,8 +220,6 @@ def main():
                             print("          •" + elemento)
                     print("\n" + nombredirector + " tiene " + str(tripla[1]) + " peliculas en total")
                     print("El promedio en la calificacion de sus peliculas es de " + str(tripla[2]))
-                    lstmoviescasting = loadMovies("casting",True)
-                    lstmoviesdetails = loadMovies("details",True)
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
 
             elif int(inputs[0])==4: #opcion 4
