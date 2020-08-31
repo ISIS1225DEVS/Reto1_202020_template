@@ -30,6 +30,7 @@ import config as cf
 import sys
 import csv
 import copy
+import statistics 
 
 from ADT import list as lt
 from DataStructures import listiterator as it
@@ -224,6 +225,7 @@ def main():
 
             elif int(inputs[0])==4: #opcion 4
                 pass
+                # statistics.mode( LISTAADT["elements"]))
 
             elif int(inputs[0])==3: #opcion 5
                 pass
