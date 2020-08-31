@@ -36,6 +36,13 @@ from DataStructures import listiterator as it
 
 from time import process_time 
 
+#======================
+#   Ruta archivos
+#======================
+
+archivoPeliculas="theMoviesdb/SmallMoviesDetailsCleaned.csv"
+archivoCasting="theMoviesdb/MovieCastingRaw-small.csv"
+
 
 
 
