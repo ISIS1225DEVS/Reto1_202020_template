@@ -33,6 +33,7 @@ import csv
 from ADT import list as lt
 from DataStructures import listiterator as it
 from DataStructures import liststructure as lt
+from Procedures import ConocerUnDirector as cud
 
 from time import process_time 
 
@@ -72,7 +73,7 @@ def loadCSVFile (file, cmpfunction):
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
-    except:p
+    except:
         print("Hubo un error con la carga del archivo")
     return lst
 
@@ -111,7 +112,8 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                nd = str(input("Ingrese el nombre de un director\n"))
+                print(cud.conocer_director(nd,lstmovies,lstmovies2))
 
             elif int(inputs[0])==4: #opcion 4
                 pass
