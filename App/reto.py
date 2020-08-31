@@ -34,6 +34,7 @@ from ADT import list as lt
 from DataStructures import listiterator as it
 from DataStructures import liststructure as lt
 from Procedures import ConocerUnDirector as cud
+from Procedures import ConocerUnActor as cua
 
 from time import process_time 
 
@@ -116,7 +117,10 @@ def main():
                 print(cud.conocer_director(nd,lstmovies,lstmovies2))
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                na = str(input("Ingrese el nombre de un actor\n"))
+                print(cua.conocer_actor(na,lstmovies,lstmovies2))
+
+        
 
             elif int(inputs[0])==3: #opcion 5
                 pass
