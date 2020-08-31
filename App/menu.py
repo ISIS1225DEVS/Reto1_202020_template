@@ -35,6 +35,50 @@ from DataStructures import listiterator as it
 
 from time import process_time 
 
+#================================
+#      estructura catalogo
+#================================
+
+def newCatalog():
+    """
+    Inicia catalogo peliculas
+    """
+    catalogo={"pelicula":None, "director":None, "genero":None, "actores":None}
+    catalogo["pelicula"]=lt.newList('SINGLE_LINKED',compIDpelicula)
+    catalogo["director"]=lt.newList("ARRAY_LIST",compDirectores)
+    catalogo["genero"]=lt.newList('SINGLE_LINKED',compGenero)
+    catalogo["actores"]=lt.newList("ARRAY_LIST",compActores)
+    return catalogo
+
+def nuevoDirector(nombre):
+    """
+    Diccionario con nombre de director, lista con nombres de sus de peliculas y promedio de rating
+    """
+    director={"nombre": "", "peliculas":None, "puntaje_total":0, "puntaje_promedio":0 }
+    director["nombre"]=nombre
+    director["peliculas"]=lt.newList('ARRAY_LIST',compDirectores)
+    director["puntaje promedio"]=(director["puntaje_total"]/ lt.size(director["peliculas"]))
+    return director
+
+def nuevoGenero(nombre_genero):
+    """
+    diccionario con nombre del genero, lista con nombres de peliculas de este genero, y promedio de rating
+    """
+    genero={"nombre":"", "peliculas":None, "promedio":0}
+    genero["nombre"]=nombre_genero
+    genero["peliculas"]=lt.newList("SINGLE_LINKED",compGenero)
+
+#========================
+#  cargado de datos
+#========================
+
+def cargarPeliculasCatologo():
+    catalogo=newCatalog()
+    lst=loadMovies()
+    for item in lst:
+        lt.addLast(catalogo["pelicula"],item)
+
+
 
 
 def printMenu():
@@ -77,9 +121,14 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+#==========================
+#     menu principal
+#==========================
+
 
 
 def main():
