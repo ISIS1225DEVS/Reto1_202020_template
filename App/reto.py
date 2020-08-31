@@ -52,18 +52,6 @@ def printMenu():
     print("0- Salir")
 
 def loadCSVFile2 (file, sep=";"):
-    """
-    Carga un archivo csv a una lista
-    Args:
-        file
-            Archivo csv del cual se importaran los datos
-        sep = ";"
-            Separador utilizado para determinar cada objeto dentro del archivo
-        Try:
-        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
-        Borra la lista e informa al usuario
-    Returns: None  
-    """
     #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
     lst = lt.newList() #Usando implementacion linkedlist
     print("Cargando archivo ....")
@@ -173,13 +161,13 @@ def Requerimiento2(numero, parametro, orden,lista):
             contador1+=1
 
     if parametro=="promedio" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+        lt.shell(lista_retorno,comparacion_promedio_mayor)
     if parametro=="promedio" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_promedio_menor)
+        lt.shell(lista_retorno,comparacion_promedio_menor)
     if parametro=="contar" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_contar_mayor)
+        lt.shell(lista_retorno,comparacion_contar_mayor)
     if parametro=="contar" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_contar_menor)
+        lt.shell(lista_retorno,comparacion_contar_menor)
 
     return print(lista_retorno)
 
@@ -316,13 +304,13 @@ def Requerimiento6(numero, parametro, genero, orden,lista):
             contador1+=1
 
     if parametro=="promedio" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+        lt.shell(lista_retorno,comparacion_promedio_mayor)
     if parametro=="promedio" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_promedio_menor)
+        lt.shell(lista_retorno,comparacion_promedio_menor)
     if parametro=="contar" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_contar_mayor)
+        lt.shell(lista_retorno,comparacion_contar_mayor)
     if parametro=="contar" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_contar_menor)
+        lt.shell(lista_retorno,comparacion_contar_menor)
      
     return print(lista_retorno)
 
@@ -401,3 +389,4 @@ def main():
                 
 if __name__ == "__main__":
     main()
+    
