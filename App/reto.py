@@ -35,6 +35,7 @@ from DataStructures import listiterator as it
 from DataStructures import liststructure as lt
 from Procedures import ConocerUnDirector as cud
 from Procedures import ConocerUnActor as cua
+from Procedures import EntenderUnGenero as eug
 
 from time import process_time 
 
@@ -122,10 +123,11 @@ def main():
 
         
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
+            elif int(inputs[0])==5: #opcion 5
+                ng = str(input("Ingrese un genero\n"))
+                print(eug.conocer_genero(ng,lstmovies))
 
-            elif int(inputs[0])==4: #opcion 6
+            elif int(inputs[0])==6: #opcion 6
                 pass
 
 
