@@ -332,7 +332,7 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMovies() 
-                lista2 = loadCSVFile2("Data/MoviesCastingRaw-small.csv")
+                lista2 = loadCSVFile2("Data/AllMoviesDetailsCleaned.csv")
                 print("Datos cargados, ",lista2['size']," elementos cargados")
 
             elif int(inputs[0])==2: #opcion 2
@@ -351,7 +351,7 @@ def main():
                 else:   
                     print("buscar info de director")
                     criteria =input('Ingrese el nombre del director\n')
-                    lst1=loadCSVFile("themoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
+                    lst1=loadCSVFile("themoviesdb/AllMoviesCastingRaw.csv",compareRecordIds)
                     respuesta=req3(criteria,"director_name",lstmovies,lst1) #filtrar una columna por criterio  
                     print(respuesta)
                  
