@@ -233,7 +233,6 @@ def main():
             elif int(inputs[0])==4: #opcion 6
                 pass
 
-
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
                 
