@@ -51,7 +51,35 @@ def printMenu():
     print("6- Crear ranking")
     print("0- Salir")
 
-
+def loadCSVFile2 (file, sep=";"):
+    """
+    Carga un archivo csv a una lista
+    Args:
+        file
+            Archivo csv del cual se importaran los datos
+        sep = ";"
+            Separador utilizado para determinar cada objeto dentro del archivo
+        Try:
+        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
+        Borra la lista e informa al usuario
+    Returns: None  
+    """
+    #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
+    lst = lt.newList() #Usando implementacion linkedlist
+    print("Cargando archivo ....")
+    t1_start = process_time() #tiempo inicial
+    dialect = csv.excel()
+    dialect.delimiter=sep
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            spamreader = csv.DictReader(csvfile, dialect=dialect)
+            for row in spamreader: 
+                lt.addLast(lst,row)
+    except:
+        print("Hubo un error con la carga del archivo")
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+    return lst
 
 
 def compareRecordIds (recordA, recordB):
@@ -82,6 +110,11 @@ def loadMovies ():
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
+def loadMovies2 ():
+    lst = loadCSVFile("Data/MoviesCastingRaw-small.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
 def comparacion_promedio_mayor(elemento1,elemento2):
     return elemento1[1]["Promedio"]>elemento2[1]["Promedio"]
 
@@ -93,7 +126,6 @@ def comparacion_contar_mayor(elemento1,elemento2):
 
 def comparacion_contar_menor(elemento1,elemento2):
     return elemento1[1]["Votos"]<elemento2[1]["Votos"]
-
 
 def Requerimiento2(numero, parametro, orden,lista):
     lista_retorno=lt.newList(datastructure="SINGLE_LINKED")
@@ -311,7 +343,9 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()  
+                lstmovies = loadMovies() 
+                lista2 = loadCSVFile2("Data/MoviesCastingRaw-small.csv")
+                print("Datos cargados, ",lista2['size']," elementos cargados")
 
             elif int(inputs[0])==2: #opcion 2
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
@@ -367,6 +401,3 @@ def main():
                 
 if __name__ == "__main__":
     main()
-
-
-
