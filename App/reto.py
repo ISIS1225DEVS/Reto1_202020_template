@@ -175,7 +175,7 @@ def main():
                 lstmoviesdetails = loadMovies("details")
 
             elif int(inputs[0])==2: #opcion 2
-                if lt.size(lstmoviescasting)>1:
+                if lt.size(lstmoviesdetails)>1:
                     try:
                         NPeliculasRanking=int(input("Ingrese el numero de peliculas que quiere que muestre el ranking (min 10): "))
                         if NPeliculasRanking<10:
