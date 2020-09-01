@@ -125,7 +125,7 @@ def ConocerAUnDirector (nombredirector,lstmoviescasting,lstmoviesdetails):
     lt.addLast(nombresanospuntajes,-1)
     IteradorNAP = it.newIterator(nombresanospuntajes)
     nombresanos=lt.newList()
-    numeropeliculas=lt.size(nombresanospuntajes)
+    numeropeliculas=lt.size(nombresanospuntajes-1)
     ADividir=0
     while it.hasNext(IteradorNAP):
         tripla=it.next(IteradorNAP)
@@ -187,7 +187,7 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
     lt.addLast(nombresanospuntajes,-1)
     IteradorNAP = it.newIterator(nombresanospuntajes)
     nombresanos=lt.newList()
-    numeropeliculas=lt.size(nombresanospuntajes)
+    numeropeliculas=lt.size(nombresanospuntajes)-1
     ADividir=0
     while it.hasNext(IteradorNAP):
         tripla=it.next(IteradorNAP)
@@ -236,7 +236,7 @@ def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
             lt.addLast(PeliculasGenero,tupla)
             count += int(elemento["vote_count"])
     lt.addLast(PeliculasGenero,-1)
-    totalpeliculas = lt.size(PeliculasGenero)
+    totalpeliculas = lt.size(PeliculasGenero)-1
     return(PeliculasGenero,totalpeliculas,count/totalpeliculas)
 
 
