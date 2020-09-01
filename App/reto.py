@@ -392,7 +392,7 @@ def main():
                     Requerimiento2(n1,p1,o1,lstmovies)
 
 
-            elif int(inputs[0])==3: #requerimineto 3
+            elif int(inputs[0])==4: #requerimineto 3
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
                     print("La lista esta vacía")
                 else:   
@@ -403,7 +403,7 @@ def main():
                     print(respuesta)
                  
             
-            elif int(inputs[0])==4: #requerimineto 4
+            elif int(inputs[0])==5: #requerimineto 4
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
                     print("La lista esta vacía")
                 else:   
@@ -411,7 +411,7 @@ def main():
                     print(Requerimiento_4(nombre_actor,lista2,lstmovies))
                     
 
-            elif int(inputs[0])==5: #requerimineto 5
+            elif int(inputs[0])==6: #requerimineto 5
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
                     print("La lista esta vacía")
                 else:   
@@ -421,7 +421,7 @@ def main():
                     print(respuesta)
 
 
-            elif int(inputs[0])==6: #requerimineto 6
+            elif int(inputs[0])==7: #requerimineto 6
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
                     print("La lista esta vacía")
                 else:
