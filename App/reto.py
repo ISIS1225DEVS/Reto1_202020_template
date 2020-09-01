@@ -153,7 +153,19 @@ def CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmovie
             lt.addLast(nombresanos,((tripla[0]+" ("+tripla[1]+")"),tripla[2]))
     lt.addLast(nombresanos,-1)
     return (nombresanos)
-
+def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
+    Iteradordetalles = it.newIterator(lstmoviesdetails)
+    PeliculasGenero = lt.newList()
+    count = 0
+    while it.hasNext(Iteradordetalles):
+        elemento = it.next(Iteradordetalles)
+        if nombregenero.title() in elemento["genres"]:
+            tupla = (elemento["original_title"],elemento["release_date"][-4:])
+            lt.addLast(PeliculasGenero,tupla)
+            count += int(elemento["vote_count"])
+    lt.lastElement(PeliculasGenero)
+    totalpeliculas = lt.size(PeliculasGenero)
+    return(PeliculasGenero,totalpeliculas,count/totalpeliculas)
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -227,10 +239,20 @@ def main():
                 pass
                 # statistics.mode( LISTAADT["elements"]))
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
-
-            elif int(inputs[0])==4: #opcion 6
+            elif int(inputs[0])==5: #opcion 5
+                if lt.size(lstmoviesdetails)>1:
+                    genero = input("Por favor ingrese el nombre del Género: ")
+                    respuesta = EntenderUnGeneroCinematografico(genero,copy.deepcopy(lstmoviesdetails))
+                    iteradornombres = it.newIterator(respuesta[0])
+                    print("\n","---------------------------------------------------------------")
+                    print( "Las peliculas con el genero",genero," son las siguientes :")
+                    while it.hasNext(iteradornombres):
+                        peli = it.next(iteradornombres)
+                        print("          •",peli[0]," (",peli[1],")")
+                    print("\n","Del género",genero,"hay",respuesta[1],"peliculas")
+                    print("El promedio en la el contador de votos del genero es de ",respuesta[2])
+                else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
+            elif int(inputs[0])==6: #opcion 6
                 pass
 
             elif int(inputs[0])==0: #opcion 0, salir
