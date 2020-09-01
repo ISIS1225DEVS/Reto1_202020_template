@@ -41,7 +41,7 @@ from time import process_time
 #======================
 
 archivoPeliculas="theMoviesdb/SmallMoviesDetailsCleaned.csv"
-archivoCasting="theMoviesdb/MovieCastingRaw-small.csv"
+archivoCasting="theMoviesdb/MoviesCastingRaw-small.csv"
 
 #==========================
 #     funciones print
@@ -53,13 +53,17 @@ def printDatosDirector(director, puntaje):
     """
     if director:
         print("Director encontrado: " + director["nombre"])
-        print("Promedio" + puntaje)
-        print("Total peliculas"+ str(lt.size(director["ref_peliculas"])
-        lineaPelicula = (director["ref_peliculas"]["pelicula"])
-        iterator = it.newIterator(lineaPelicula)
+        print("Promedio: " + str(puntaje))
+        print("Total peliculas: "+ str(lt.size(director["ref_peliculas"])))
+        Lista = (director["ref_peliculas"])
+        iterator = it.newIterator(Lista)
         while it.hasNext(iterator):
-            pelicula=it.next(iterator)
-            print("Titulo: "+ pelicula["original_title"])
+            diccionarioID=it.next(iterator)
+            llave=diccionarioID["pelicula"]
+            for i in range(1):
+                datos=lt.getElement(llave,i)
+                titulo=datos["original_title"]
+                print("Titulo: "+ titulo)
     else:
         print("No encontro director")
 
@@ -110,7 +114,7 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                nombreDirector = intput("Ingrese nombre director")
+                nombreDirector = input("Ingrese nombre director: ")
                 infoDirector=controlador.obtenerPeliculasPorDirector(cont, nombreDirector)
                 puntaje= controlador.promedioDirector(cont, nombreDirector)
                 printDatosDirector(infoDirector, puntaje)

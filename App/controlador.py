@@ -46,12 +46,12 @@ def loadCSVFile (file, cmpfunction):
     return lst
 
 
-def loadMovies ():
+def loadMovies (archivoPeliculas):
     lst = loadCSVFile(archivoPeliculas, compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
-def loadCasting ():
+def loadCasting (archivoCasting):
     lst = loadCSVFile(archivoCasting ,compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
@@ -69,29 +69,32 @@ def cargarPeliculas_1(catalogo, archivoPeliculas):
     Carga datos de peliculas al catalogo bajo la lista de peliculas_1
     Crea apuntador que relaciona ID con datos de pelicula
     """
-    archivo=loadMovies()
-    for pelicula in archivo:
-        modelo.agregarPelicula_1(catalogo, pelicula)
-        ID=pelicula["id"]
-        modelo.agregarApuntador(catalogo, ID, pelicula)
+    archivo=loadMovies(archivoPeliculas)
+    for i in range(1,lt.size(archivo)):
+        elemento=lt.getElement(archivo,i)
+        modelo.agregarPelicula_1(catalogo, elemento)
+        ID=int(elemento["id"])
+        modelo.agregarApuntador(catalogo, ID, elemento)
 
 def cargarDirectores(catalogo, archivoCasting):
     """
     Carga director al catalogo
     """
-    archivo=loadCasting()
-    for pelicula in archivo:
-        nombreDirector= pelicula["director_name"]    #se obtiene director de cada pelicula
-        ref= pelicula["id"]                     #se obtiene id de cada peilcula en casting
-        ids=catalogo["apuntadorSegunId"]        #obtiene lista de ids de catalogo
-        pos=lt.isPresent(ids, ref)              #compara si la referencia se encuentra en el catalogo
-        if pos >0:
-            apuntador=lt.getElement(ids, pos)       #linea datos pelicula
-        else:
-            print("error")
-
+    archivo=loadCasting(archivoCasting)
+    print("Cargando datos a catalogos")
+    for i in range(1,lt.size(archivo)):
+        linea=lt.getElement(archivo,i)
+        nombreDirector= linea["director_name"]    #se obtiene director de cada pelicula
+        ref= int(linea["id"])
+        comp=lt.newList('SINGLE_LINKED',modelo.compIDpelicula)
+        for k in range(1,lt.size(catalogo["apuntadorSegunId"])):
+            dicc=lt.getElement(catalogo["apuntadorSegunId"],k)
+            ids=int(dicc["ID"])                           #obtiene lista de ids de catalogo
+            lt.addLast(comp,ids)
+        pos=lt.isPresent(comp, ref)              #compara si la referencia se encuentra en el catalogo
+        apuntador=lt.getElement(catalogo["apuntadorSegunId"],pos)
         modelo.agregarDirector(catalogo, nombreDirector, apuntador)
-
+    print("Catalogos cargados correctamente")
 
 #==============================
 #     Funciones para consultas

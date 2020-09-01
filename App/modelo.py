@@ -17,7 +17,7 @@ def newCatalog():
     Inicia catalogo peliculas
     """
     catalogo={"peliculas_1":None, "apuntadorSegunId":None, "directores":None, "generos":None, "actores":None}
-    catalogo["peliculas_1"]=lt.newList('SINGLE_LINKED',compIDpelicula)
+    catalogo["peliculas_1"]=lt.newList('ARRAY_LIST',compIDpelicula)
     catalogo["apuntadorSegunId"]=lt.newList('ARRAY_LIST',compIDpelicula)
     catalogo["directores"]=lt.newList("ARRAY_LIST",compDirectores)
     catalogo["generos"]=lt.newList('SINGLE_LINKED',compGenero)
@@ -39,7 +39,7 @@ def nuevoDirector(nombre):
     """
     director={"nombre": "","ref_peliculas":None, "puntaje_total":0.0}
     director["nombre"]=nombre
-    director["ref_peliculas"]=lt.newList('SINGLE_LINKED',compIDpelicula)
+    director["ref_peliculas"]=lt.newList('ARRAY_LIST',compIDpelicula)
     return director
 
 def nuevoGenero(nombre_genero):
@@ -66,12 +66,9 @@ def agregarApuntador (catalogo, ID, pelicula_1):
     Agrega apuntador a catalogo
     """
     peliculas= catalogo["apuntadorSegunId"]
-    posibleID= lt.isPresent(peliculas, ID)
-    if posibleID > 0:
-        Identidad=lt.getElement(peliculas, posibleID)
-    else:
-        Identidad=nuevaEntradaPelicula(ID)
-        lt.addLast(peliculas, Identidad)
+    
+    Identidad=nuevaEntradaPelicula(ID)
+    lt.addLast(peliculas, Identidad)
     lt.addLast(Identidad["pelicula"], pelicula_1)
 
 def agregarDirector(catalogo, nombreDirector, ID_pelicula):
@@ -79,14 +76,25 @@ def agregarDirector(catalogo, nombreDirector, ID_pelicula):
     Agrega director a catalogo, y lista de peliculas a su diccionario
     """
     directores= catalogo["directores"]
-    posibleDirector= lt.isPresent(directores, nombreDirector)
+    nombres=lt.newList('SINGLE_LINKED',compDirectores)
+    for i in range(1,lt.size(directores)):
+        directo=lt.getElement(directores,i)
+        nombre=directo["nombre"]
+        lt.addLast(nombres,nombre)
+    posibleDirector= lt.isPresent(nombres, nombreDirector)
     if posibleDirector > 0:
         director=lt.getElement(directores, posibleDirector)
     else:
         director=nuevoDirector(nombreDirector)
         lt.addLast(directores, director)
-    lt.addLast(director["ref_peliculas"],ID_pelicula)
-    director["puntaje_total"]+=float(ID_pelicula["pelicula"]["vote_average"])
+    lt.addLast(director["ref_peliculas"],ID_pelicula)           #el ID_pelicula es un diccionario
+    
+    pelicula=ID_pelicula["pelicula"]
+    for i in range(1):
+        datos=lt.getElement(pelicula,i)
+        calificacion=datos["vote_average"]
+
+    director["puntaje_total"]+=float(calificacion)
 
     
 
@@ -96,23 +104,32 @@ def agregarDirector(catalogo, nombreDirector, ID_pelicula):
 #==================================================
 
 def directorAverage(catalogo, nombreDirector):
-    directores= catalogo["directores"]
-    posibleDirector= lt.isPresent(directores, nombreDirector)
+    nombres=lt.newList('SINGLE_LINKED',compDirectores)
+    for i in range(1,lt.size(catalogo["directores"])):
+        director=lt.getElement(catalogo["directores"],i)
+        nombre=director["nombre"]
+        lt.addLast(nombres,nombre)
+    posibleDirector= lt.isPresent(nombres, nombreDirector)
     if posibleDirector > 0:
-        director=lt.getElement(directores, posibleDirector)
+        directorf=lt.getElement(catalogo["directores"], posibleDirector)
     else:
         print("error, no encontro director")
     
-    promedio=director["puntaje_total"]/lt.size(director["ref_peliculas"])
+    promedio=directorf["puntaje_total"]/lt.size(directorf["ref_peliculas"])
 
     return promedio
 
 def obtenerPeliculasDirector(catalogo, nombreDirector):
+    nombres=lt.newList('SINGLE_LINKED',compDirectores)
+    for i in range(1,lt.size(catalogo["directores"])):
+        director=lt.getElement(catalogo["directores"],i)
+        nombre=director["nombre"]
+        lt.addLast(nombres,nombre)
 
-    posiciondirector=lt.isPresent(catalogo["director"], nombreDirector)
+    posiciondirector=lt.isPresent(nombres, nombreDirector)
 
     if posiciondirector >0:
-        infodirector= lt.getElement(catalogo["director"],posiciondirector)
+        infodirector= lt.getElement(catalogo["directores"],posiciondirector)
         return infodirector
     return None
 
@@ -142,6 +159,28 @@ def compDirectores(nombre1, nombre2):
     if (nombre1 == nombre2):
         return 0
     elif nombre1 > nombre2:
+        return 1
+    else:
+        return -1
+
+def compGenero(genero1, genero2):
+    """
+    compara dos generos distintos
+    """
+    if (genero1 == genero2):
+        return 0
+    elif genero1 > genero2:
+        return 1
+    else:
+        return -1
+
+def compActores(actor1, actor2):
+    """
+    compara dos generos distintos
+    """
+    if (actor1 == actor2):
+        return 0
+    elif actor1 > actor2:
         return 1
     else:
         return -1
