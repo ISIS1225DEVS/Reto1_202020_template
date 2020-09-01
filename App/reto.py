@@ -51,9 +51,7 @@ def printMenu():
     print("6- Entender un genero")
     print("7- Crear ranking")
     print("0- Salir")
-
-
-
+    
 
 def compareRecordIds (recordA, recordB):
     if int(recordA['id']) == int(recordB['id']):
@@ -61,7 +59,6 @@ def compareRecordIds (recordA, recordB):
     elif int(recordA['id']) > int(recordB['id']):
         return 1
     return -1
-
 
 
 def loadCSVFile_1 (file, cmpfunction):
@@ -176,13 +173,13 @@ def Requerimiento2(numero, parametro, orden,lista):
             contador1+=1
 
     if parametro=="promedio" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+        lt.shell(lista_retorno,comparacion_promedio_mayor)
     if parametro=="promedio" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_promedio_menor)
+        lt.shell(lista_retorno,comparacion_promedio_menor)
     if parametro=="contar" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_contar_mayor)
+        lt.shell(lista_retorno,comparacion_contar_mayor)
     if parametro=="contar" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_contar_menor)
+        lt.shell(lista_retorno,comparacion_contar_menor)
 
     return print(lista_retorno)
 
@@ -343,13 +340,13 @@ def Requerimiento6(numero, parametro, genero, orden,lista):
             contador1+=1
 
     if parametro=="promedio" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_promedio_mayor)
+        lt.shell(lista_retorno,comparacion_promedio_mayor)
     if parametro=="promedio" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_promedio_menor)
+        lt.shell(lista_retorno,comparacion_promedio_menor)
     if parametro=="contar" and orden=="mayor":
-        lt.insertion(lista_retorno,comparacion_contar_mayor)
+        lt.shell(lista_retorno,comparacion_contar_mayor)
     if parametro=="contar" and orden=="menor":
-        lt.insertion(lista_retorno,comparacion_contar_menor)
+        lt.shell(lista_retorno,comparacion_contar_menor)
      
     return print(lista_retorno)
 
@@ -370,10 +367,10 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
+
                 lstmovies = loadMovies_1()
                 lista2 = loadCSVFile2("Data/themoviesdb/MoviesCastingRaw-small.csv")
                 print("Datos cargados", lista2['size'], "elementos cargados")
-
 
             elif int(inputs[0])==2: #requerimiento 1
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
@@ -397,8 +394,8 @@ def main():
                     print("La lista esta vacía")
                 else:   
                     print("buscar info de director")
-                    criteria =input('Ingrese el nombre del director: \n')
-                    lst1=loadCSVFile("themoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
+                    criteria =input('Ingrese el nombre del director\n')
+                    lst1=loadCSVFile("themoviesdb/AllMoviesCastingRaw.csv",compareRecordIds)
                     respuesta=req3(criteria,"director_name",lstmovies,lst1) #filtrar una columna por criterio  
                     print(respuesta)
                  
@@ -437,6 +434,4 @@ def main():
                 
 if __name__ == "__main__":
     main()
-
-
-
+    

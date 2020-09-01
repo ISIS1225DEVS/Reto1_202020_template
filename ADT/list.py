@@ -344,6 +344,10 @@ def subList (lst, pos, numelem):
 
 
 from Sorting import insertionsort as comp_ins
+from Sorting import shellsort as comp_shell
 
 def insertion(lista,comp_f):
     comp_ins.insertionSort(lista,comp_f)
+
+def shell(lista,comp_f):
+    comp_shell.shellSort(lista,comp_f)
