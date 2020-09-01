@@ -26,16 +26,14 @@
   Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
 """
 
-#Hacer pruebas con 20 datos!!!!
-#Error total peliculas +1
-#genero no puede ir vacio
-#error numero de peliculas que retorna
+#Hacer pruebas con 10 datos!!!!
+
 
 import config as cf
 import sys
 import csv
 import copy
-from scipy import stats as statistics
+import statistics 
 
 from ADT import list as lt
 from DataStructures import listiterator as it
@@ -94,6 +92,7 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
+
 def loadMovies (indicador,MUTE=False):
     if indicador=="details":
         lst = loadCSVFile("themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
@@ -107,7 +106,7 @@ def loadMovies (indicador,MUTE=False):
 def ConocerAUnDirector (nombredirector,lstmoviescasting,lstmoviesdetails):
     IteradorCasting = it.newIterator(lstmoviescasting)
     IDsDirector = lt.newList()
-    while it.hasNext(IteradorCasting)==True:
+    while it.hasNext(IteradorCasting):
         elemento=it.next(IteradorCasting)
         if elemento['director_name'].upper()==nombredirector.upper():
             lt.addLast(IDsDirector,elemento["id"])
@@ -125,7 +124,7 @@ def ConocerAUnDirector (nombredirector,lstmoviescasting,lstmoviesdetails):
     lt.addLast(nombresanospuntajes,-1)
     IteradorNAP = it.newIterator(nombresanospuntajes)
     nombresanos=lt.newList()
-    numeropeliculas=lt.size(nombresanospuntajes-1)
+    numeropeliculas=lt.size(nombresanospuntajes)
     ADividir=0
     while it.hasNext(IteradorNAP):
         tripla=it.next(IteradorNAP)
@@ -158,6 +157,8 @@ def CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmovie
     lt.addLast(nombresanos,-1)
     return (nombresanos)
 
+
+
 def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
     IteradorDetalles = it.newIterator(lstmoviesdetails)
     IteradorCasting = it.newIterator(lstmoviescasting)
@@ -174,7 +175,18 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
         if elemento['actor3_name'].upper()==nombreactor.upper():
             lt.addLast(IDsActor,elemento["id"])
             lt.addLast(Directorsname,elemento["director_name"])
-    mD = statistics.mode(Directorsname["elements"])[0][0]      
+    mD = []
+    for n in Directorsname["elements"]:
+        k = 0
+        for m in range(lt.size(Directorsname)):
+            if  n == lt.getElement(Directorsname,m):
+                k += 1
+        mD.append((n,k))
+    while 1 < len(mD):
+        if mD[0][1] >= mD[1][1]:
+            del mD[1]
+        else:
+            del mD[0]         
     IteradorID = it.newIterator(IDsActor)
     nombresanospuntajes=lt.newList()
     numero = it.next(IteradorID)
@@ -187,7 +199,7 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
     lt.addLast(nombresanospuntajes,-1)
     IteradorNAP = it.newIterator(nombresanospuntajes)
     nombresanos=lt.newList()
-    numeropeliculas=lt.size(nombresanospuntajes)-1
+    numeropeliculas=lt.size(nombresanospuntajes)
     ADividir=0
     while it.hasNext(IteradorNAP):
         tripla=it.next(IteradorNAP)
@@ -195,36 +207,7 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
             lt.addLast(nombresanos,(tripla[0]+" ("+tripla[1]+")"))
             ADividir+=float(tripla[2])
     lt.addLast(nombresanos,-1)
-    return ((nombresanos,numeropeliculas,ADividir/numeropeliculas,mD))
-
-def CrearRankingPeliculasGenero(Genero,NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmoviesdetails):
-    if Criterio=="COUNT" and TipoDeOrdenamiento=="ASCENDENTE": MeSo.mergesort(lstmoviesdetails,CountFunctionMenMay)
-    elif Criterio=="COUNT" and TipoDeOrdenamiento=="DESCENDENTE": MeSo.mergesort(lstmoviesdetails,CountFunctionMayMen)
-    elif Criterio=="AVERAGE" and TipoDeOrdenamiento=="ASCENDENTE": MeSo.mergesort(lstmoviesdetails,AverageFunctionMenMay)
-    elif Criterio=="AVERAGE" and TipoDeOrdenamiento=="DESCENDENTE": MeSo.mergesort(lstmoviesdetails,AverageFunctionMayMen)
-    if Criterio=="COUNT": SopaDeMacacoUmaDeliciaKKKK="vote_count"
-    elif Criterio=="AVERAGE": SopaDeMacacoUmaDeliciaKKKK="vote_average"
-    respuesta = EntenderUnGeneroCinematografico(Genero,copy.deepcopy(lstmoviesdetails))
-    iteradornombres = it.newIterator(respuesta[0])
-    nombre=it.next(iteradornombres)[0]
-    iterable=it.newIterator(lstmoviesdetails)
-    ListaAImprimir=lt.newList()
-    while it.hasNext(iteradornombres)==True and it.hasNext(iterable)==True:
-        pelicula=it.next(iterable)
-        if pelicula["title"]==nombre:
-            tripla=(pelicula["title"],pelicula["release_date"][-4:],pelicula[SopaDeMacacoUmaDeliciaKKKK])
-            lt.addLast(ListaAImprimir,tripla)  
-            nombre=it.next(iteradornombres)[0] 
-    lt.addLast(ListaAImprimir,-1)
-    IteradorNAP = it.newIterator(ListaAImprimir)
-    nombresanos=lt.newList()
-    while it.hasNext(IteradorNAP):
-        tripla=it.next(IteradorNAP)
-        if type(tripla)==tuple:
-            lt.addLast(nombresanos,((tripla[0]+" ("+tripla[1]+")"),tripla[2]))
-    lt.addLast(nombresanos,-1)
-    return (nombresanos)
-
+    return ((nombresanos,numeropeliculas,ADividir/numeropeliculas,mD[0][0]))
 def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
     Iteradordetalles = it.newIterator(lstmoviesdetails)
     PeliculasGenero = lt.newList()
@@ -236,10 +219,8 @@ def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
             lt.addLast(PeliculasGenero,tupla)
             count += int(elemento["vote_count"])
     lt.addLast(PeliculasGenero,-1)
-    totalpeliculas = lt.size(PeliculasGenero)-1
+    totalpeliculas = lt.size(PeliculasGenero)
     return(PeliculasGenero,totalpeliculas,count/totalpeliculas)
-
-
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -321,11 +302,18 @@ def main():
                     while it.hasNext(IterableNombreAno)==True:
                         elemento = it.next(IterableNombreAno)
                         if type(elemento)==str:
-                            print("          •" + elemento)
+                            print("          •" + element
                     print("\n" + nombreactor + " tiene " + str(tripla[1]) + " peliculas en total")
                     print("El promedio en la calificacion de sus peliculas es de " + str(tripla[2]))
                     print("El director con el que mas ha trabajado es: "+str(tripla[3]))
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
+            elif int(inputs[0])==3: #opcion 5
+                pass
+
+            elif int(inputs[0])==4: #opcion 6
+
+                pass
+                # statistics.mode( LISTAADT["elements"]))
 
             elif int(inputs[0])==5: #opcion 5
                 if lt.size(lstmoviesdetails)>1:
@@ -376,7 +364,9 @@ def main():
                                 c+=1
                     except: print("ERROR")                  
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
+            elif int(inputs[0])==6: #opcion 6
 
+                pass
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
                 
