@@ -220,7 +220,7 @@ def main():
                     except: print("ERROR")                  
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
             elif int(inputs[0])==3: #opcion 3 
-                if lt.size(lstmoviescasting)>1:
+                if lt.size(lstmoviescasting)>1 and lt.size(lstmoviesdetails)>1:
                     nombredirector=input("Por favor ingrese el nombre del director: ")
                     tripla = ConocerAUnDirector(nombredirector,copy.deepcopy(lstmoviescasting),copy.deepcopy(lstmoviesdetails))
                     nombreano = tripla[0]
