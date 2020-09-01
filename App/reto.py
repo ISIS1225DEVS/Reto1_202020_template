@@ -64,7 +64,7 @@ def compareRecordIds (recordA, recordB):
 
 
 
-def loadCSVFile (file, cmpfunction):
+def loadCSVFile_1 (file, cmpfunction):
     lst=lt.newList("ARRAY_LIST", cmpfunction)
     dialect = csv.excel()
     dialect.delimiter=";"
@@ -78,10 +78,15 @@ def loadCSVFile (file, cmpfunction):
     return lst
 
 
+def loadMovies_1 ():
+    lst = loadCSVFile_1("themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    print(lst) 
+
+
 def loadCSVFile2 (file, sep=";"):
     #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
     lst = lt.newList() #Usando implementacion linkedlist
-    print("Cargando archivo ....")
     t1_start = process_time() #tiempo inicial
     dialect = csv.excel()
     dialect.delimiter=sep
@@ -97,11 +102,6 @@ def loadCSVFile2 (file, sep=";"):
     return lst
 
 
-def loadMovies ():
-    lst = loadCSVFile("themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) and loadCSVFile("themoviesdb/Casting_small.csv",compareRecordIds)
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-    print(lst) 
-
 def comparacion_promedio_mayor(elemento1,elemento2):
     return elemento1[1]["Promedio"]>elemento2[1]["Promedio"]
 
@@ -115,25 +115,11 @@ def comparacion_contar_menor(elemento1,elemento2):
     return elemento1[1]["Votos"]<elemento2[1]["Votos"]
 
 
-def reqerimiento_1(nombre_director, lista):
-    t1_start = process_time()
-    peliculas_buenas = 0
-    promedio = 0
-    for posicion in range(1, lt.size(lista)+1):
-        linea = lt.getElement(lista, posicion)
-        if (linea['director_name'] == nombre_director) and (float(linea['vote_average']) > 6):
-            peliculas_buenas += 1
-            promedio += float(linea['vote_average'])
-    t1_stop = process_time()
-    return (peliculas_buenas, (round(promedio/peliculas_buenas), 2), (t1_stop-t1_start))
-
-
-def reqerimiento_1_dos_archivos(nombre_director, lista_casting, lista_estadisticas):
-    t1_start = process_time()
+def reqerimiento_1(nombre_director, lista_casting, lista_estadisticas):
     peliculas_buenas = 0
     promedio = 0
     lista_id = lt.newList()
-    for posicion in range(1, lt.size(lista_casting)+1):
+    for posicion in range(1, lt.size(lista_casting)):
         linea_casting = lt.getElement(lista, posicion)
         if linea_casting['director_name'] == nombre_director:
             id = linea['id']
@@ -141,10 +127,9 @@ def reqerimiento_1_dos_archivos(nombre_director, lista_casting, lista_estadistic
             if linea_estadisticas['id'] == id:
                 promedio += float(linea_estadisticas['vote_average'])
                 peliculas_buenas += 1
-    t1_stop = process_time()
-    return (peliculas_buenas, (round(promedio/peliculas_buenas), 2), (t1_stop-t1_start))
+    return (peliculas_buenas, round((promedio/peliculas_buenas), 2))
 
-
+ 
 def Requerimiento2(numero, parametro, orden,lista):
     lista_retorno=lt.newList(datastructure="SINGLE_LINKED")
     contador1=0
@@ -253,37 +238,13 @@ def req3 (criteria,column,lst,lst1):
     return(dic)
 
 
-def Requerimiento_4(nombre_actor,lista):
-        t1_start = process_time()
-        lista_peliculas = []
-        numero_peliculas = 0
-        promedio_calificacion = 0
-        director_mas_colaboraciones = []
-        cuenta_colaboraciones = []
-        for posicion in range(lt.size(lista)+1):
-            linea = lt.getElement(lista, posicion)
-            if (linea['actor1_name'] == nombre_actor) or (linea['actor2_name'] == nombre_actor) or (linea['actor3_name'] == nombre_actor) or (linea['actor4_name'] == nombre_actor) or (linea['actor5_name'] == nombre_actor):
-                lista_peliculas.append(linea['origina_title'])
-                numero_peliculas += 1
-                promedio_calificacion += float(linea['vote_average'])
-                if linea['director_name'] not in director_mas_colaboraciones:
-                    director_mas_colaboraciones.append(linea['director_name'])
-                    cuenta_colaboraciones.append(1)
-                else:
-                    ubicacion = director_mas_colaboraciones.index(linea['director_name'])
-                    cuenta_colaboraciones[ubicacion] += 1
-        mas_colaboraciones = director_mas_colaboraciones[cuenta_colaboraciones.index(max(cuenta_colaboraciones))]
-        t1_stop = process_time()
-        return (lista_peliculas,numero_peliculas, (promedio_calificacion / numero_peliculas), mas_colaboraciones, (t1_stop-t1_start))
-
-def Requerimiento_4_dos_archivos(nombre_actor,lista_casting,lista_estadisticas):
-        t1_start = process_time()
+def Requerimiento_4(nombre_actor,lista_casting,lista_estadisticas):
         lista_peliculas = lt.newList()
         numero_peliculas = 0
         promedio_calificacion = 0
         director_mas_colaboraciones = [] #Contador
         cuenta_colaboraciones = [] #Contador
-        for posicion in range(lt.size(lista)+1):
+        for posicion in range(lt.size(lista)):
             linea_casting = lt.getElement(lista_casting, posicion)
             linea_estadisticas = lt.getElement(lista_estadisticas, posicion)
             if (linea_casting['actor1_name'] == nombre_actor) or (linea_casting['actor2_name'] == nombre_actor) or (linea_casting['actor3_name'] == nombre_actor) or (linea_casting['actor4_name'] == nombre_actor) or (linea_casting['actor5_name'] == nombre_actor):
@@ -297,8 +258,8 @@ def Requerimiento_4_dos_archivos(nombre_actor,lista_casting,lista_estadisticas):
                     ubicacion_director = director_mas_colaboraciones.index(linea['director_name'])
                     cuenta_colaboraciones[ubicacion_director] += 1
         mas_colaboraciones = director_mas_colaboraciones[cuenta_colaboraciones.index(max(cuenta_colaboraciones))]
-        t1_stop = process_time()
-        return (lista_peliculas,numero_peliculas, round((promedio_calificacion / numero_peliculas),2), mas_colaboraciones, (t1_stop-t1_start))
+        return (lista_peliculas,numero_peliculas, round((promedio_calificacion / numero_peliculas),2), mas_colaboraciones)
+
 
 def req5(criteria,lst):
     if lst["type"]=="SINGLE_LINKED":
@@ -409,8 +370,8 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies("Data/SmallMoviesCleaned.csv")
-                lista2 = loadCSVFile2("Data/Casting_small.csv")
+                lstmovies = loadMovies_1()
+                lista2 = loadCSVFile2("Data/themoviesdb/MoviesCastingRaw-small.csv")
                 print("Datos cargados", lista2['size'], "elementos cargados")
 
 
@@ -419,7 +380,7 @@ def main():
                     print("La lista esta vacía")
                 else:
                     nombre_director = input('Ingrese el nombre del director: \n')
-                    print(reqerimiento_1_dos_archivos(nombre_director,lista2,lstmovies))
+                    print(reqerimiento_1(nombre_director,lista2,lstmovies))
 
             elif int(inputs[0])==3: #requerimineto 2
                 if lstmovies==None or lstmovies['size']==0: #obtener la longitud de la lista
@@ -447,7 +408,7 @@ def main():
                     print("La lista esta vacía")
                 else:   
                     nombre_actor = input('Ingrese el nombre del actor: \n')
-                    print(Requerimiento_4_dos_archivos(nombre_actor,lista2,lstmovies))
+                    print(Requerimiento_4(nombre_actor,lista2,lstmovies))
                     
 
             elif int(inputs[0])==5: #requerimineto 5
