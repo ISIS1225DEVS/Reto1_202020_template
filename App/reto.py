@@ -26,7 +26,10 @@
   Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
 """
 
-#Hacer pruebas con 10 datos!!!!
+#Hacer pruebas con 20 datos!!!!
+#Error total peliculas +1
+#genero no puede ir vacio
+#error numero de peliculas que retorna
 
 
 import config as cf
@@ -91,7 +94,6 @@ def loadCSVFile (file, cmpfunction):
     except:
         print("Hubo un error con la carga del archivo")
     return lst
-
 
 def loadMovies (indicador,MUTE=False):
     if indicador=="details":
