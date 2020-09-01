@@ -103,7 +103,7 @@ def loadMovies (indicador,MUTE=False):
 def ConocerAUnDirector (nombredirector,lstmoviescasting,lstmoviesdetails):
     IteradorCasting = it.newIterator(lstmoviescasting)
     IDsDirector = lt.newList()
-    while it.hasNext(IteradorCasting)==True:
+    while it.hasNext(IteradorCasting):
         elemento=it.next(IteradorCasting)
         if elemento['director_name'].upper()==nombredirector.upper():
             lt.addLast(IDsDirector,elemento["id"])
@@ -153,6 +153,68 @@ def CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmovie
             lt.addLast(nombresanos,((tripla[0]+" ("+tripla[1]+")"),tripla[2]))
     lt.addLast(nombresanos,-1)
     return (nombresanos)
+
+
+def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
+    IteradorDetalles = it.newIterator(lstmoviesdetails)
+    IteradorCasting = it.newIterator(lstmoviescasting)
+    IDsActor = lt.newList()
+    Directorsname = {}
+    while it.hasNext(IteradorCasting):
+        elemento=it.next(IteradorCasting)
+        if elemento['actor1_name'].upper()==nombreactor.upper():
+            lt.addLast(IDsActor,elemento["id"])
+        if elemento['actor2_name'].upper()==nombreactor.upper():
+            lt.addLast(IDsActor,elemento["id"])
+        if elemento['actor3_name'].upper()==nombreactor.upper():
+            lt.addLast(IDsActor,elemento["id"])
+    for n in IDsActor:
+        elemento = it.next(IteradorCasting)
+        if elemento["id"] == n(0):
+            if elemento["director_name"] in Directorsname:
+                Directorsname[elemento["director_name"]] += 1
+            else:
+                Directorsname[elemento["director_name"]] = 1    
+    lt.addLast(IDsActor,-1)
+    IteradorID = it.newIterator(IDsActor)
+    nombresanospuntajes=lt.newList()
+    numero = it.next(IteradorID)
+    n = 0
+    D = False
+    while not D:
+        if Directorsname[n]> Directorsname[n+1]:
+            del(Directorsname[n+1])
+        elif n+1 == len(Directorsname):
+            D = True
+        else:
+            del(Directorsname[n])
+    
+    while it.hasNext(IteradorID):
+        pelicula=it.next(IteradorDetalles)
+        if pelicula["id"]==numero:
+            tripla = (pelicula["title"],pelicula["release_date"][-4:],pelicula["vote_average"])
+            lt.addLast(nombresanospuntajes,tripla)
+            numero=it.next(IteradorID)
+    lt.addLast(nombresanospuntajes,-1)
+    IteradorNAP = it.newIterator(nombresanospuntajes)
+    nombresanos=lt.newList()
+    numeropeliculas=lt.size(nombresanospuntajes)
+    ADividir=0
+    while it.hasNext(IteradorNAP):
+        tripla=it.next(IteradorNAP)
+        if type(tripla)==tuple:
+            lt.addLast(nombresanos,(tripla[0]+" ("+tripla[1]+")"))
+            ADividir+=float(tripla[2])
+    lt.addLast(nombresanos,-1)
+    return ((nombresanos,numeropeliculas,ADividir/numeropeliculas,Directorsname[0]))
+
+
+
+
+
+
+
+
 
 def main():
     """
@@ -224,9 +286,21 @@ def main():
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
 
             elif int(inputs[0])==4: #opcion 4
-                pass
-                # statistics.mode( LISTAADT["elements"]))
-
+                if lt.size(lstmoviescasting)>1:
+                    nombreactor=input("Por favor ingrese el nombre del actor: ")
+                    tripla = ConocerAUnActor(nombreactor,copy.deepcopy(lstmoviescasting),copy.deepcopy(lstmoviesdetails))
+                    nombreano = tripla[0]
+                    IterableNombreAno = it.newIterator(nombreano)
+                    print("\n" + "---------------------------------------------------------------")
+                    print(nombreactor + " ha actuado en las siguientes peliculas:")
+                    while it.hasNext(IterableNombreAno)==True:
+                        elemento = it.next(IterableNombreAno)
+                        if type(elemento)==str:
+                            print("          •" + elemento)
+                    print("\n" + nombreactor + " tiene " + str(tripla[1]) + " peliculas en total")
+                    print("El promedio en la calificacion de sus peliculas es de " + str(tripla[2]))
+                    print("El director con el que mas ha trabajado es: "+str(tripla[3]))
+                else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
             elif int(inputs[0])==3: #opcion 5
                 pass
 
