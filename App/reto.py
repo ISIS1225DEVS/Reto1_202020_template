@@ -26,6 +26,9 @@
   Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
 """
 
+#Hacer pruebas con 10 datos!!!!
+
+
 import config as cf
 import sys
 import csv
@@ -53,7 +56,7 @@ def printMenu():
     print("3- Conocer un director")
     print("4- Conocer un actor")
     print("5- Entender un genero")
-    print("6- Crear ranking")
+    print("6- Crear ranking por genero")
     print("0- Salir")
 
 
@@ -153,6 +156,35 @@ def CrearRankingPeliculas(NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmovie
             lt.addLast(nombresanos,((tripla[0]+" ("+tripla[1]+")"),tripla[2]))
     lt.addLast(nombresanos,-1)
     return (nombresanos)
+
+def CrearRankingPeliculasGenero(Genero,NPeliculasRanking,Criterio,TipoDeOrdenamiento,lstmoviesdetails):
+    if Criterio=="COUNT" and TipoDeOrdenamiento=="ASCENDENTE": MeSo.mergesort(lstmoviesdetails,CountFunctionMenMay)
+    elif Criterio=="COUNT" and TipoDeOrdenamiento=="DESCENDENTE": MeSo.mergesort(lstmoviesdetails,CountFunctionMayMen)
+    elif Criterio=="AVERAGE" and TipoDeOrdenamiento=="ASCENDENTE": MeSo.mergesort(lstmoviesdetails,AverageFunctionMenMay)
+    elif Criterio=="AVERAGE" and TipoDeOrdenamiento=="DESCENDENTE": MeSo.mergesort(lstmoviesdetails,AverageFunctionMayMen)
+    if Criterio=="COUNT": SopaDeMacacoUmaDeliciaKKKK="vote_count"
+    elif Criterio=="AVERAGE": SopaDeMacacoUmaDeliciaKKKK="vote_average"
+    respuesta = EntenderUnGeneroCinematografico(Genero,copy.deepcopy(lstmoviesdetails))
+    iteradornombres = it.newIterator(respuesta[0])
+    nombre=it.next(iteradornombres)[0]
+    iterable=it.newIterator(lstmoviesdetails)
+    ListaAImprimir=lt.newList()
+    while it.hasNext(iteradornombres)==True and it.hasNext(iterable)==True:
+        pelicula=it.next(iterable)
+        if pelicula["title"]==nombre:
+            tripla=(pelicula["title"],pelicula["release_date"][-4:],pelicula[SopaDeMacacoUmaDeliciaKKKK])
+            lt.addLast(ListaAImprimir,tripla)  
+            nombre=it.next(iteradornombres)[0] 
+    lt.addLast(ListaAImprimir,-1)
+    IteradorNAP = it.newIterator(ListaAImprimir)
+    nombresanos=lt.newList()
+    while it.hasNext(IteradorNAP):
+        tripla=it.next(IteradorNAP)
+        if type(tripla)==tuple:
+            lt.addLast(nombresanos,((tripla[0]+" ("+tripla[1]+")"),tripla[2]))
+    lt.addLast(nombresanos,-1)
+    return (nombresanos)
+
 def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
     Iteradordetalles = it.newIterator(lstmoviesdetails)
     PeliculasGenero = lt.newList()
@@ -163,9 +195,11 @@ def EntenderUnGeneroCinematografico(nombregenero,lstmoviesdetails):
             tupla = (elemento["original_title"],elemento["release_date"][-4:])
             lt.addLast(PeliculasGenero,tupla)
             count += int(elemento["vote_count"])
-    lt.lastElement(PeliculasGenero)
+    lt.addLast(PeliculasGenero,-1)
     totalpeliculas = lt.size(PeliculasGenero)
     return(PeliculasGenero,totalpeliculas,count/totalpeliculas)
+
+
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -219,6 +253,7 @@ def main():
                                 c+=1
                     except: print("ERROR")                  
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
+
             elif int(inputs[0])==3: #opcion 3 
                 if lt.size(lstmoviescasting)>1 and lt.size(lstmoviesdetails)>1:
                     nombredirector=input("Por favor ingrese el nombre del director: ")
@@ -244,16 +279,50 @@ def main():
                     genero = input("Por favor ingrese el nombre del Género: ")
                     respuesta = EntenderUnGeneroCinematografico(genero,copy.deepcopy(lstmoviesdetails))
                     iteradornombres = it.newIterator(respuesta[0])
-                    print("\n","---------------------------------------------------------------")
-                    print( "Las peliculas con el genero",genero," son las siguientes :")
-                    while it.hasNext(iteradornombres):
+                    print("\n"+"---------------------------------------------------------------")
+                    print( "Las peliculas con el genero",genero,"son las siguientes :")
+                    peli = it.next(iteradornombres)
+                    while (it.hasNext(iteradornombres) and type(peli)==tuple):
+                        print("          •"+peli[0]+" ("+peli[1]+")")
                         peli = it.next(iteradornombres)
-                        print("          •",peli[0]," (",peli[1],")")
-                    print("\n","Del género",genero,"hay",respuesta[1],"peliculas")
-                    print("El promedio en la el contador de votos del genero es de ",respuesta[2])
+                    print("\n"+"Del género "+genero+" hay "+str(respuesta[1])+" peliculas")
+                    print("El promedio en el contador de votos del genero es de ",respuesta[2])
                 else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
-            elif int(inputs[0])==6: #opcion 6
-                pass
+
+            elif int(inputs[0])==6: #opcion 6   
+                if lt.size(lstmoviesdetails)>1:
+                    try:
+                        NPeliculasRanking=int(input("Ingrese el numero de peliculas que quiere que muestre el ranking (min 10): "))
+                        if NPeliculasRanking<10:
+                            print("Error, el numero de peliculas es menor a 10")
+                            raise NameError('')
+                        Criterio=input("Elija un criterio entre COUNT (conteo de votos) y AVERAGE (promedio de votos): ").upper()
+                        if (Criterio!="COUNT" and Criterio!="AVERAGE"):
+                            print("Error, se eligio un criterio distinto a COUNT o AVERAGE")
+                            raise NameError('')
+                        TipoDeOrdenamiento=input("Elija un tipo de ordenamiento entre ascendente y descendente: ").upper()
+                        if (TipoDeOrdenamiento!="ASCENDENTE" and TipoDeOrdenamiento!="DESCENDENTE"):
+                            print("Error, se eligio un tipo de ordenamiento distinto a ascendente o descendente")
+                            raise NameError('')
+                        genero = input("Por favor ingrese el nombre del genero: ")
+                        tupla = CrearRankingPeliculasGenero(genero,NPeliculasRanking,Criterio,TipoDeOrdenamiento,copy.deepcopy(lstmoviesdetails))
+                        IteradorImprimir=it.newIterator(tupla)
+                        print("\n" + "A continuacion, las mejores " + str(NPeliculasRanking) + " peliculas por " + Criterio.lower() + ", en orden " + TipoDeOrdenamiento.lower())
+                        print("-------------------------------------------------------------------------------------")
+                        print("", end=" "*10)
+                        print("Pelicula", end=" "*62)
+                        print(Criterio.capitalize())
+                        print("-------------------------------------------------------------------------------------")
+                        c=1
+                        while it.hasNext(IteradorImprimir)==True:
+                            elemento = it.next(IteradorImprimir)
+                            if type(elemento)==tuple:
+                                print(str(c),end=" "*(10-len(str(c))))
+                                print((elemento[0]),end=" "*(70-len(elemento[0])))
+                                print(elemento[1])
+                                c+=1
+                    except: print("ERROR")                  
+                else: print("No se pudo hacer la operación, asegurese de cargar los datos primero")
 
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
