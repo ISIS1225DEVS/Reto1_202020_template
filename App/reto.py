@@ -33,6 +33,7 @@ import csv
 from ADT import list as lt
 from DataStructures import listiterator as it
 from DataStructures import liststructure as lt
+from Sorting import shellsort as sh 
 
 from time import process_time 
 
@@ -78,9 +79,51 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("App\SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def less_count( self, element1, element2):
+    if int(element1['vote_count']) <  int(element2['vote_count']):
+        return True
+    return False
+
+
+def less_average( self, element1, element2):
+    if int(element1['vote_average']) <  int(element2['vote_average']):
+        return True
+    return False
+
+def greater_count(self, element1, element2):
+    if int(element1['vote_count']) > int(element2['vote_count']):
+        return True 
+    return False
+
+def greater_average(self,element1,element2):
+    if int(element1['vote_average']) > int(element1['vote_average']):
+        return True 
+    return False
+
+
+def crear_ranking_peliculas(tipo_de_ordenamiento,cantidad_elementos:int,orden):
+    lista_peliculas = loadMovies()
+    lista_resultado = lt.newList('SINGLE_LINKED',None)
+
+    if tipo_de_ordenamiento == "vote_average":
+        if orden == 'ascendente':
+            sorting = sh.shellSort(lista_peliculas,greater_average)
+        elif orden == 'descendente':
+            sorting = sh.shellSort(lista_peliculas,less_average)
+    elif tipo_de_ordenamiento == 'vote_count':
+        if orden == 'ascendente':
+            sorting = sh.shellSort(lista_peliculas,greater_count)
+        elif orden == 'descendente':
+            sorting = sh.shellSort(lista_peliculas,less_count)
+    contador = 1
+    while contador <= cantidad_elementos:
+        lt.addFirst(lista_resultado,lt.getElement(lista_peliculas,contador))
+        contador += 1 
+    return lista_resultado
 
 
 def main():
@@ -92,7 +135,6 @@ def main():
     Return: None 
     """
 
-
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
@@ -102,6 +144,11 @@ def main():
                 lstmovies = loadMovies()
 
             elif int(inputs[0])==2: #opcion 2
+
+                ordenamiento = str(input("Ingrese el criterio de ordenamiento: " ))
+                elementos = int(input("Ingrese la cantidad de elementos que desea ver: " ))
+                tipo_orden = str(input("Ingrese el tipo de orden: 'ascendente o descendente': "))
+                crear_ranking_peliculas(ordenamiento,elementos,tipo_orden)
                 pass
 
             elif int(inputs[0])==3: #opcion 3

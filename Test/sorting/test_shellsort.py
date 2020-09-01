@@ -56,6 +56,11 @@ class shellSortTest (unittest.TestCase):
             return True
         return False
 
+    def greater(self, element1, element2):
+        if int(element1['book_id']) > int(element2['book_id']):
+            return True 
+        return False
+
     def test_randomElements (self):
         """
          Lista con elementos en orden aleatorio
