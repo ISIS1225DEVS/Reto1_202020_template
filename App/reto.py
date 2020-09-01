@@ -159,36 +159,39 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
     IteradorDetalles = it.newIterator(lstmoviesdetails)
     IteradorCasting = it.newIterator(lstmoviescasting)
     IDsActor = lt.newList()
-    Directorsname = {}
+    Directorsname = lt.newList()
     while it.hasNext(IteradorCasting):
         elemento=it.next(IteradorCasting)
         if elemento['actor1_name'].upper()==nombreactor.upper():
             lt.addLast(IDsActor,elemento["id"])
+            lt.addLast(Directorsname,elemento["director_name"])
         if elemento['actor2_name'].upper()==nombreactor.upper():
             lt.addLast(IDsActor,elemento["id"])
+            lt.addLast(Directorsname,elemento["director_name"])
         if elemento['actor3_name'].upper()==nombreactor.upper():
             lt.addLast(IDsActor,elemento["id"])
-    for n in IDsActor:
-        elemento = it.next(IteradorCasting)
-        if elemento["id"] == n(0):
-            if elemento["director_name"] in Directorsname:
-                Directorsname[elemento["director_name"]] += 1
-            else:
-                Directorsname[elemento["director_name"]] = 1    
+            lt.addLast(Directorsname,elemento["director_name"])
+
+    d = {}
+    m = 0
+    for n in Directorsname["elements"]:
+        if Directorsname["elements"][m] in d:
+            d[Directorsname["elements"][m]] +=1
+        else:
+            d[Directorsname["elements"][m]] =1
+        m += 1
+    
+        
+        
+        
+
+
+
+
     lt.addLast(IDsActor,-1)
     IteradorID = it.newIterator(IDsActor)
     nombresanospuntajes=lt.newList()
     numero = it.next(IteradorID)
-    n = 0
-    D = False
-    while not D:
-        if Directorsname[n]> Directorsname[n+1]:
-            del(Directorsname[n+1])
-        elif n+1 == len(Directorsname):
-            D = True
-        else:
-            del(Directorsname[n])
-    
     while it.hasNext(IteradorID):
         pelicula=it.next(IteradorDetalles)
         if pelicula["id"]==numero:
@@ -206,7 +209,7 @@ def ConocerAUnActor(nombreactor,lstmoviescasting,lstmoviesdetails):
             lt.addLast(nombresanos,(tripla[0]+" ("+tripla[1]+")"))
             ADividir+=float(tripla[2])
     lt.addLast(nombresanos,-1)
-    return ((nombresanos,numeropeliculas,ADividir/numeropeliculas,Directorsname[0]))
+    return ((nombresanos,numeropeliculas,ADividir/numeropeliculas,Directorsname["elements"][0]))
 
 
 
