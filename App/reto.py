@@ -79,6 +79,7 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
+<<<<<<< HEAD
     lst = loadCSVFile("App\SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
@@ -125,6 +126,151 @@ def crear_ranking_peliculas(tipo_de_ordenamiento,cantidad_elementos:int,orden):
         contador += 1 
     return lista_resultado
 
+=======
+    details= loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(details)) + " elementos cargados")
+    return details
+
+def loadCasting():
+    casting= loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv", compareRecordIds)
+    print("Datos cargados, " + str(lt.size(casting))+ "elementos cargados")
+    return casting
+
+
+def unir_listas(lista_a:list, lista_b:list)->list:
+    union_listas = lt.newList('SINGLE_LINKED', None)
+
+    iter1 = it.newIterator(lista_a)
+    while it.hasNext(iter1):
+        d = it.next(iter1)
+
+        iter2 = it.newIterator(lista_b)
+        while it.hasNext(iter2):
+            c = it.next(iter2)
+
+            if not "id" in d:
+                print(d)
+
+            if d["id"] == c["id"]:
+                union_d_con_c = {**d, **c}
+                lt.addFirst(union_listas, union_d_con_c)
+                break
+    return(union_listas)
+
+def conocer_director (director:str, casting:list, details:list)->list:
+       
+    details_pelis= lt.newList('SINGLE_LINKED', None)
+    pelis_por_director = lt.newList('SINGLE_LINKED', None)
+
+    
+    t1_start = process_time()
+
+    iter_casting = it.newIterator(casting)
+    while it.hasNext(iter_casting):
+        c = it.next(iter_casting)
+        if c['director_name'] == director:
+            lt.addFirst(pelis_por_director, c)
+            iter_details= it.newIterator(details)
+            while it.hasNext(iter_details):
+                d = it.next(iter_details)
+                if d["id"]==c["id"]:
+                    lt.addFirst(details_pelis, d)  
+        
+    
+    lista_final= unir_listas(details_pelis, pelis_por_director)
+           
+    numero_de_peliculas_director = lt.size(lista_final)
+    suma_vote_average = 0.0
+    
+    iter_final = it.newIterator(lista_final)
+    print (("Pelicula," +"\t"+"Director,"+"\t"+ "Vote_average,"+"\t"+"vote_count"+"\n"+\
+        "------------------------------------------------------------"))
+        
+    while it.hasNext(iter_final):
+        u = it.next(iter_final)
+        suma_vote_average = suma_vote_average + float(u["vote_average"])
+        vote_average_pelicula=u['vote_average']
+        vote_count=u['vote_count']
+        id_peli=u['id']
+        
+        print("P"+str(id_peli)+"\t"+"\t"+str(director)+"\t"+str(vote_average_pelicula)+"\t"+"\t"+str(vote_count))
+    print("\n")    
+
+    promedio_peliculas = 0
+    if(numero_de_peliculas_director > 0):
+        promedio_peliculas = suma_vote_average/numero_de_peliculas_director
+        print("Numero de peliculas: "+ str(numero_de_peliculas_director)+"\n"+ \
+            "Promedio peliculas (vote_average): "+ str(promedio_peliculas)+"\n")
+    
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos") 
+
+    
+    return ()
+
+def conocer_actor (actor:str, casting:list, details:list)->list:
+    
+    details_pelis= lt.newList('SINGLE_LINKED', None)
+    pelis_por_actor = lt.newList('SINGLE_LINKED', None)
+
+    t1_start = process_time()
+
+    iter_casting = it.newIterator(casting)
+    while it.hasNext(iter_casting):
+        c = it.next(iter_casting)
+        if c["actor1_name"] == actor or c["actor2_name"] == actor or \
+            c["actor3_name"] == actor or c["actor4_name"] == actor \
+            or c["actor5_name"] == actor:
+            lt.addFirst(pelis_por_actor, c)
+            iter_details= it.newIterator(details)
+            while it.hasNext(iter_details):
+                d = it.next(iter_details)
+                if d["id"]==c["id"]:
+                    lt.addFirst(details_pelis, d)  
+
+    
+    lista_final= unir_listas(details_pelis, pelis_por_actor)
+           
+    numero_de_peliculas_actor = lt.size(lista_final)
+    suma_vote_average = 0.0
+    
+    mayor=0
+    i=0
+    dict_dir={}
+    iter_final= it.newIterator(lista_final)
+    print (("Pelicula," +"\t"+"Director,"+"\t"+ "Vote_average,"+"\n"+\
+        "------------------------------------------------------------"))
+    while it.hasNext(iter_final):
+        u = it.next(iter_final)
+        suma_vote_average = suma_vote_average + float(u["vote_average"])
+        vote_average_pelicula=u['vote_average']
+        vote_count=u['vote_count']
+        director=u["director_name"]
+        id_peli=u['id']
+        print("P"+str(id_peli)+"\t"+"\t"+str(director)+"\t"+str(vote_average_pelicula))
+
+        dire= u['director_name'] 
+        if dire not in dict_dir:
+            dict_dir[dire]=1
+        elif dire in dict_dir:
+            dict_dir[dire]+=1
+
+    print("\n")
+    director_mas_colaboraciones = max(dict_dir, key=dict_dir.get) 
+        
+   
+    promedio_peliculas = 0
+    if(numero_de_peliculas_actor > 0):
+        promedio_peliculas = suma_vote_average/numero_de_peliculas_actor
+        print("Numero de peliculas: "+ str(numero_de_peliculas_actor)+"\n"+ \
+            "Promedio peliculas (vote_average): "+ str(promedio_peliculas)+"\n"+\
+                "Director con más colaboraciones: "+ str(director_mas_colaboraciones)+"\n")
+    
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos") 
+
+    return ()
+>>>>>>> 0b1008cd698ca785189c3202df83af36000e5511
 
 def main():
     """
@@ -141,7 +287,8 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
+                lstMovies = loadMovies()
+                lstCasting= loadCasting()
 
             elif int(inputs[0])==2: #opcion 2
 
@@ -152,9 +299,22 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
+                if lstMovies==None or lt.size(lstMovies)==0 or lstCasting==None or lt.size(lstCasting)==0:
+                    print ("Hubo un error imprimiendo los resultados")
+                else:
+                    director= input("Ingrese el director:\n")
+                    resp= conocer_director(director, lstCasting, lstMovies)
+                    print(resp)
                 pass
 
             elif int(inputs[0])==4: #opcion 4
+                if lstMovies==None or lt.size(lstMovies)==0 or lstCasting==None or lt.size(lstCasting)==0:
+                    print ("Hubo un error imprimiendo los resultados")
+                else:
+                    actor= input("Ingrese el actor:\n")
+                    resp= conocer_actor(actor, lstCasting, lstMovies)
+                    print(resp)
+                
                 pass
 
             elif int(inputs[0])==3: #opcion 5
@@ -169,3 +329,4 @@ def main():
                 
 if __name__ == "__main__":
     main()
+
