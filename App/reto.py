@@ -79,8 +79,7 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-<<<<<<< HEAD
-    lst = loadCSVFile("App\SmallMoviesDetailsCleaned.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
@@ -126,10 +125,6 @@ def crear_ranking_peliculas(tipo_de_ordenamiento,cantidad_elementos:int,orden):
         contador += 1 
     return lista_resultado
 
-=======
-    details= loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(details)) + " elementos cargados")
-    return details
 
 def loadCasting():
     casting= loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv", compareRecordIds)
@@ -270,7 +265,6 @@ def conocer_actor (actor:str, casting:list, details:list)->list:
     print("Tiempo de ejecución ",t1_stop-t1_start," segundos") 
 
     return ()
->>>>>>> 0b1008cd698ca785189c3202df83af36000e5511
 
 def main():
     """
