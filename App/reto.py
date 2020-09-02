@@ -106,7 +106,73 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                def cargar_directores(file, sep = ";"):
+                    lst = lt.newList('SINGLE_LINKED', comparar_director) #Usando implementacion linkedlist
+                    print("Cargando archivo ....")
+                    t1_start = process_time() #tiempo inicial
+                    dialect = csv.excel()
+                    dialect.delimiter=sep
+                    try:
+                        with open(file, encoding="utf-8") as csvfile:
+                            spamreader = csv.DictReader(csvfile, dialect=dialect)
+                            for row in spamreader: 
+                        
+                                director = {}
+                                director["nombre"] = row["director_name"]
+                                posicion1 = lt.isPresent(lst, director["nombre"])
+                                if posicion1 == 0:
+                                    director["peliculas"] = lt.newList()
+                                    lt.addLast(director["peliculas"], row["id"])
+                                    lt.addLast(lst, director)
+                                else:
+                                    directores = lt.getElement(lst, posicion1)
+                                    lt.addLast(directores["peliculas"], row["id"])
+                                
+                    except:
+                        print("Hubo un error con la carga del archivo")
+                    t1_stop = process_time() #tiempo final
+                    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+                    return lst
+                
+                
+                def cargar_peliculas (file, sep=";"):
+                    lst = lt.newList('SINGLE_LINKED', comparar_id)
+                    print("Cargando archivo ....")
+                    #t1_start = process_time() #tiempo inicial
+                    dialect = csv.excel()
+                    dialect.delimiter=sep
+                    try:
+                        with open(file, encoding="utf-8") as csvfile:
+                            spamreader = csv.DictReader(csvfile, dialect=dialect)
+                            for row in spamreader: 
+
+                                lt.addLast(lst,row)
+                    except:
+                        print("Hubo un error con la carga del archivo")
+                    #t1_stop = process_time() #tiempo final
+                    #print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+                    return lst
+                
+                
+                lista_directores = cargar_directores(cf.data_dir+"themoviesdb/AllMoviesCastingRaw.csv")
+                lista_peliculas = cargar_peliculas(cf.data_dir+"themoviesdb/AllMoviesDetailsCleaned.csv")
+                print("longitud de la lista\n")
+
+                nombre_director = input("Ingrese el nombre de un director:\n")
+                pos = lt.isPresent(lista_directores, nombre_director)
+                directorr=lt.getElement(lista_directores, pos)
+                print("El numero de peliculas dirigidas por el director son:\n", directorr["peliculas"]["size"])
+                itera = it.newIterator(directorr["peliculas"])
+                average = 0
+                while it.hasNext(itera):
+                    elemento = it.next(itera)
+
+                    posicion = lt.isPresent(lista_peliculas, elemento)
+                    peliculas  = lt.getElement(lista_peliculas, posicion)
+                    print(peliculas["original_title"])
+                    average += float(peliculas["vote_average"])
+                promedio = average/directorr["peliculas"]["size"] 
+                print("El promedio de todas sus peliculas es:\n", promedio)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
@@ -144,8 +210,50 @@ def main():
             
 
 
-            elif int(inputs[0])==4: #opcion 6
-                pass
+            elif int(inputs[0])==6: #opcion 6
+
+                def cargar_peliculas_por_genero(file, sep = ";"):
+                    lst = lt.newList('SINGLE_LINKED', comparar_genero) #Usando implementacion linkedlist
+                    print("Cargando archivo ....")
+                    dialect = csv.excel()
+                    dialect.delimiter=sep
+    
+                    with open(file, encoding="utf-8") as csvfile:
+                        spamreader = csv.DictReader(csvfile, dialect=dialect)
+                        for row in spamreader: 
+
+                            generos = row['genres'].split("|")
+            
+                            for genero in generos:
+                                elemento = {}
+                                elemento["genero"] = genero
+
+                                posicion1 = lt.isPresent(lst, elemento["genero"])
+                                if posicion1 == 0: #  no esta
+                                    elemento["peliculas"] = lt.newList('SINGLE_LINKED', comparar_pelicula) #lista con las peliculas por genero
+                                    elemento["sum_Votos"] = int(row["vote_count"])
+                                    elemento["sum_average"] = float(row["vote_average"])
+                                    lt.addLast(elemento["peliculas"], row["original_title"])
+                                    lt.addLast(lst, elemento)  # se adiciona a la lista de todos los elemnetos lst 
+                                else:
+                                    elemento_row  = lt.getElement(lst, posicion1)
+                                    #revisar si la peicula ya esta 
+                                    posi_peli = lt.isPresent(elemento_row['peliculas'],row["original_title"])
+                                    if posi_peli == 0:
+                                        lt.addLast(elemento_row["peliculas"], row["original_title"])
+                                        elemento_row["sum_Votos"] += int(row["vote_count"])
+                                        elemento_row["sum_average"] += float(row["vote_average"])
+                
+                    return lst
+                
+                lista_Genero = cargar_peliculas_por_genero(cf.data_dir+"themoviesdb/AllMoviesDetailsCleaned.csv")
+                
+                columna =  input("1. Por votos, 2. Por promedio\n")
+                orden = input("1. Las Mejores , 2. Las peores\n")
+
+                cantidad = input("Numero de peliculas a retornar\n")
+
+                ranking_peliculas_por_genero(lista_Genero,columna,orden,cantidad)
 
 
             elif int(inputs[0])==0: #opcion 0, salir
