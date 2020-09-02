@@ -29,13 +29,49 @@
 import config as cf
 import sys
 import csv
+import controlador
 
 from ADT import list as lt
 from DataStructures import listiterator as it
-from DataStructures import liststructure as lt
 
 from time import process_time 
 
+#======================
+#   Ruta archivos
+#======================
+
+archivoPeliculas="theMoviesdb/SmallMoviesDetailsCleaned.csv"
+archivoCasting="theMoviesdb/MoviesCastingRaw-small.csv"
+
+#==========================
+#     funciones print
+#==========================
+
+def printDatosDirector(director, puntaje):
+    """
+    Imprime datos directo particular
+    """
+    if director:
+        print("Director encontrado: " + director["nombre"])
+        print("Promedio: " + str(puntaje))
+        print("Total peliculas: "+ str(lt.size(director["ref_peliculas"])))
+        Lista = (director["ref_peliculas"])
+        iterator = it.newIterator(Lista)
+        while it.hasNext(iterator):
+            diccionarioID=it.next(iterator)
+            llave=diccionarioID["pelicula"]
+            for i in range(1):
+                datos=lt.getElement(llave,i)
+                titulo=datos["original_title"]
+                print("Titulo: "+ titulo)
+    else:
+        print("No encontro director")
+
+
+
+#==========================
+#     menu principal
+#==========================
 
 
 def printMenu():
@@ -51,36 +87,6 @@ def printMenu():
     print("6- Crear ranking")
     print("0- Salir")
 
-
-
-
-def compareRecordIds (recordA, recordB):
-    if int(recordA['id']) == int(recordB['id']):
-        return 0
-    elif int(recordA['id']) > int(recordB['id']):
-        return 1
-    return -1
-
-
-
-def loadCSVFile (file, cmpfunction):
-    lst=lt.newList("ARRAY_LIST", cmpfunction)
-    dialect = csv.excel()
-    dialect.delimiter=";"
-    try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                lt.addLast(lst,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return lst
-
-
-def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-    return lst
 
 
 def main():
@@ -99,13 +105,19 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
+                print("Iniciando catalogo")
+                cont=controlador.iniciarCatalogo()
+                print("Cargando datos")
+                controlador.cargarDatos(cont, archivoPeliculas, archivoCasting)
 
             elif int(inputs[0])==2: #opcion 2
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                nombreDirector = input("Ingrese nombre director: ")
+                infoDirector=controlador.obtenerPeliculasPorDirector(cont, nombreDirector)
+                puntaje= controlador.promedioDirector(cont, nombreDirector)
+                printDatosDirector(infoDirector, puntaje)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
