@@ -51,7 +51,44 @@ def printMenu():
     print("6- Crear ranking")
     print("0- Salir")
 
+def less(elemento1, elemento2, columna):
+    #print("entra a less")
+    if float(elemento1[columna]) < float(elemento2[columna]):
+        return True
+    return False
 
+def greater(elemento1, elemento2,columna):
+    #print("entra a less")
+    if float(elemento1[columna]) > float(elemento2[columna]):
+        return True
+    return False
+
+def comparar_director(elemento1, elemento2):
+    if elemento1 == elemento2["nombre"]:
+        return 0
+    return 1
+
+def comparar_actores(elemento1, elemento2):
+    if elemento1 == elemento2["nombre"]:
+        return 0
+    return 1
+
+def comparar_genero(elemento1, elemento2):
+
+    if elemento1 == elemento2["genero"]:
+        return 0
+    return 1
+
+def comparar_pelicula(elemento1, elemento2):
+
+    if elemento1 == elemento2:
+        return 0
+    return 1
+
+def comparar_id(elemento1, elemento2):
+    if elemento1 == elemento2["id"]:
+        return 0
+    return 1
 
 
 def compareRecordIds (recordA, recordB):
