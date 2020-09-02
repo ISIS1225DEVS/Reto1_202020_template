@@ -83,24 +83,24 @@ def loadMovies ():
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
-def less_count( self, element1, element2):
+def less_count(element1, element2):
     if int(element1['vote_count']) <  int(element2['vote_count']):
         return True
     return False
 
 
-def less_average( self, element1, element2):
-    if int(element1['vote_average']) <  int(element2['vote_average']):
+def less_average(element1, element2):
+    if float(element1['vote_average']) <  float(element2['vote_average']):
         return True
     return False
 
-def greater_count(self, element1, element2):
+def greater_count(element1, element2):
     if int(element1['vote_count']) > int(element2['vote_count']):
         return True 
     return False
 
-def greater_average(self,element1,element2):
-    if int(element1['vote_average']) > int(element1['vote_average']):
+def greater_average(element1,element2):
+    if float(element1['vote_average']) > float(element1['vote_average']):
         return True 
     return False
 
@@ -289,7 +289,7 @@ def main():
                 ordenamiento = str(input("Ingrese el criterio de ordenamiento: " ))
                 elementos = int(input("Ingrese la cantidad de elementos que desea ver: " ))
                 tipo_orden = str(input("Ingrese el tipo de orden: 'ascendente o descendente': "))
-                crear_ranking_peliculas(ordenamiento,elementos,tipo_orden)
+                print(crear_ranking_peliculas(ordenamiento,elementos,tipo_orden))
                 pass
 
             elif int(inputs[0])==3: #opcion 3
