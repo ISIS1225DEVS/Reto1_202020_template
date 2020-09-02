@@ -266,6 +266,41 @@ def conocer_actor (actor:str, casting:list, details:list)->list:
 
     return ()
 
+    def entender_genero(genero:str)->list:
+        movies=loadMovies()
+        lista_final=lt.newList('SINGLE_LINKED', None)
+        pelicula=lt.newList('SINGLE_LINKED', None)
+        votos=0
+        
+
+        t1_start = process_time()
+
+        while it.hasNext(iter_casting):
+        c = it.next(movies)
+        if genero in c["genres"] 
+            lt.addFirst(pelicula, c["original_title"])
+            lt.addLast(pelicula,c["genres"])
+            lt.addLast(pelicula,c["vote_count"])
+            votos+=c["vote_count"]
+            lt.addFirst(lista_final,pelicula)
+        
+        print (("pelicula," +"\t"+"genres,"+"\t"+ "Vote_count,"+"\n"+\
+        "------------------------------------------------------------"))
+        print(lista_final)
+        cpeli=lt.size(lista_final)
+        votos=votos/cpeli
+        print("Numero de Películas: "+str(cpeli)+"\n"+ \
+            "Promedio películas: "+str(votos)
+    
+
+        return()
+            
+
+
+
+            
+            
+
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -311,8 +346,10 @@ def main():
                 
                 pass
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
+            elif int(inputs[0])==5: #opcion 5
+                genero=input("Ingrese el genero que desea verificar: ")
+                movies=loadMovies
+                entender_genero(movies,genero)                                                           )
 
             elif int(inputs[0])==4: #opcion 6
                 pass
