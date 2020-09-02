@@ -69,7 +69,7 @@ def loadCSVFile (file, cmpfunction):
     dialect = csv.excel()
     dialect.delimiter=";"
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
+        with open(cf.data_dir + file, encoding="utf-8") as csvfile:
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
@@ -100,15 +100,19 @@ def greater_count(element1, element2):
     return False
 
 def greater_average(element1,element2):
+<<<<<<< HEAD
     if float(element1['vote_average']) > float(element1['vote_average']):
+=======
+    if float(element1['vote_average']) > float(element2['vote_average']):
+>>>>>>> 85970e054cada77764761c5445ce7b2f0c7ac872
         return True 
     return False
 
 
-def crear_ranking_peliculas(tipo_de_ordenamiento,cantidad_elementos:int,orden):
+def crear_ranking_peliculas(tipo_de_ordenamiento:str,cantidad_elementos:int,orden, lstMovies:list):
     lista_peliculas = loadMovies()
     lista_resultado = lt.newList('SINGLE_LINKED',None)
-
+    
     if tipo_de_ordenamiento == "vote_average":
         if orden == 'ascendente':
             sorting = sh.shellSort(lista_peliculas,greater_average)
@@ -123,12 +127,13 @@ def crear_ranking_peliculas(tipo_de_ordenamiento,cantidad_elementos:int,orden):
     while contador <= cantidad_elementos:
         lt.addFirst(lista_resultado,lt.getElement(lista_peliculas,contador))
         contador += 1 
+    
     return lista_resultado
 
 
 def loadCasting():
     casting= loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv", compareRecordIds)
-    print("Datos cargados, " + str(lt.size(casting))+ "elementos cargados")
+    print("Datos cargados, " + str(lt.size(casting))+ " elementos cargados")
     return casting
 
 
@@ -266,6 +271,33 @@ def conocer_actor (actor:str, casting:list, details:list)->list:
 
     return ()
 
+def ranking_genero(genero: str, lstmovies:list, tipo_de_ordenamiento:str, cantidad_elementos:int, orden:str)-> list:
+    lista_genero = lt.newList('SINGLE_LINKED',None)
+    iter_genero=it.newIterator(lstmovies)
+    lista_resultado=lt.newList('SINGLE_LINKED', None)
+        
+    while it.hasNext(iter_genero):
+        g = it.next(iter_genero)
+        if genero==g['genres']:
+            lt.addFirst(lista_genero, g)
+
+    if tipo_de_ordenamiento == "vote_average":
+        if orden == 'ascendente':
+            sorting = sh.shellSort(lista_genero,greater_average)
+        elif orden == 'descendente':
+            sorting = sh.shellSort(lista_genero,less_average)
+    elif tipo_de_ordenamiento == 'vote_count':
+        if orden == 'ascendente':
+            sorting = sh.shellSort(lista_genero,greater_count)
+        elif orden == 'descendente':
+            sorting = sh.shellSort(lista_genero,less_count)
+    contador = 1
+    while contador <= cantidad_elementos:
+        lt.addFirst(lista_resultado,lt.getElement(lista_genero,contador))
+        contador += 1 
+        
+    return lista_resultado
+
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
@@ -285,11 +317,15 @@ def main():
                 lstCasting= loadCasting()
 
             elif int(inputs[0])==2: #opcion 2
-
                 ordenamiento = str(input("Ingrese el criterio de ordenamiento: " ))
                 elementos = int(input("Ingrese la cantidad de elementos que desea ver: " ))
                 tipo_orden = str(input("Ingrese el tipo de orden: 'ascendente o descendente': "))
+<<<<<<< HEAD
                 print(crear_ranking_peliculas(ordenamiento,elementos,tipo_orden))
+=======
+                resp=crear_ranking_peliculas(ordenamiento,elementos,tipo_orden, lstMovies)
+                print(resp)
+>>>>>>> 85970e054cada77764761c5445ce7b2f0c7ac872
                 pass
 
             elif int(inputs[0])==3: #opcion 3
@@ -311,10 +347,19 @@ def main():
                 
                 pass
 
-            elif int(inputs[0])==3: #opcion 5
+            elif int(inputs[0])==5: #opcion 5
                 pass
 
-            elif int(inputs[0])==4: #opcion 6
+            elif int(inputs[0])==6: #opcion 6
+                if lstMovies==None or lt.size(lstMovies)==0:
+                    print ("Hubo un error imprimiendo los resultados")
+                else:
+                    genero= input("Ingrese el genero:\n")
+                    ordenamiento = str(input("Ingrese el criterio de ordenamiento: \n" ))
+                    elementos = int(input("Ingrese la cantidad de elementos que desea ver: \n" ))
+                    tipo_orden = str(input("Ingrese el tipo de orden: 'ascendente o descendente': \n"))
+                    resp= ranking_genero(genero, lstMovies, ordenamiento, elementos, tipo_orden)
+                    print(resp)
                 pass
 
 
