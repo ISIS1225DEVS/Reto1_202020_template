@@ -78,8 +78,9 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    print(lst)
     return lst
 
 
@@ -110,8 +111,38 @@ def main():
             elif int(inputs[0])==4: #opcion 4
                 pass
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
+            elif int(inputs[0])==5: #opcion 5
+                
+                genero = input("Ingrese el genero:\n")
+                itera = it.newIterator(lstmovies)
+                average = 0
+                numero = 0
+                lista_peliculas = lt.newList('ARRAY_LIST', cmpfunction=None)
+                while it.hasNext(itera):
+                    elemento = it.next(itera)
+                    if elemento["genres"] is None:
+                        pass
+                    else:
+                        if genero in elemento["genres"]:
+                            numero +=1
+                            try:
+                                average += float(elemento["vote_average"])
+                                lt.addLast(lista_peliculas,elemento["original_title"])
+                            except:
+                                pass
+                promedio = average/numero
+                tamano = lt.size(lista_peliculas)
+                if tamano == 0:
+                    print("No hay peliculas que coincidan con el genero.")
+                else:
+                    iteraa = it.newIterator(lista_peliculas)
+                    while it.hasNext(iteraa):
+                        pelicula = it.next(iteraa)
+                        print(pelicula)
+                print("La cantidad de peliculas de este genero es:", tamano)
+                print("El promedio es:", promedio)        
+            
+
 
             elif int(inputs[0])==4: #opcion 6
                 pass
