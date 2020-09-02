@@ -21,6 +21,8 @@
 import config
 from Utils import error as error
 from DataStructures import liststructure as lt
+from Sorting import shellsort as shell_sort
+
 
 
 """
@@ -342,4 +344,6 @@ def subList (lst, pos, numelem):
     except Exception as exp:
         error.reraise (exp, 'List->subList: ')
 
+def ordenamiento_shell(lst,funcion_comparacion):
 
+    return shell_sort.shellSort(lst,funcion_comparacion)
