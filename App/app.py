@@ -523,6 +523,7 @@ def main():
                     average += float(peliculas["vote_average"])
                 promedio = average/directorr["peliculas"]["size"] 
                 print("El promedio de todas sus peliculas es:\n", promedio)
+                
 
             elif int(inputs[0])==4: #Requerimiento  4
                 listaActores =cargar_listaActores("Data/AllMoviesCastingRaw.csv")

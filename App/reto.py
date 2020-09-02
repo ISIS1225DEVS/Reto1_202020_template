@@ -212,40 +212,86 @@ def main():
                 print("El promedio de todas sus peliculas es:\n", promedio)
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                def cargar_listaActores(file, sep=";"):
+                    lst = lt.newList('SINGLE_LINKED', comparar_actores) 
+                
+                    dialect = csv.excel()
+                    dialect.delimiter=sep
+                    nombres_actores =["actor1_name","actor2_name","actor3_name","actor4_name","actor5_name"]
+                    try:
+                        with open(file, encoding="utf-8") as csvfile:
+                            spamreader = csv.DictReader(csvfile, dialect=dialect)
+                            for row in spamreader: 
+                                #print(row)
+
+                                # agregar una lista para los directores 
+                                #directores ={}
+                                #directores["director"] =lt.newList('SINGLE_LINKED', comparar_directores)  #lista directores                
+                                for   nombreCol in nombres_actores:                    
+                                    actor = {}                    
+                                    actor["nombre"] = row[nombreCol]
+
+                                    posicion1 = lt.isPresent(lst, actor["nombre"])
+                                    if posicion1 == 0:
+                                        actor["peliculas"] = lt.newList()   #ids Peliculas del actor
+                                        actor["director"] =lt.newList('SINGLE_LINKED', comparar_director)  #lista directores
+                                    
+                                        lt.addLast(actor["peliculas"], row["id"])
+                                        director ={}
+                                        director["nombre"] =row["director_name"]
+                                        director["count"] = 1
+
+                                        lt.addLast(actor["director"],director )
+                                        
+
+                                        lt.addLast(lst, actor)
+                                    else:
+                                        actores = lt.getElement(lst, posicion1)
+                                        lt.addLast(actores["peliculas"], row["id"])
+
+                                        #validra si ya esta el director o no
+                                        pos_director = lt.isPresent(actores["director"],row["director_name"])
+
+                                        if pos_director ==0:  # no esta crear director
+                                            director ={}
+                                            director["nombre"] = row["director_name"]
+                                            director["count"] = 1
+
+                                            lt.addLast( actores["director"],director)
+                                        else:    # ya esta ese director aumnetar count en uno
+                                            director = lt.getElement(actores["director"],pos_director)
+                                            director["count"] = director["count"] + 1
+                                
+                    except:
+                        print("Hubo un error con la carga del archivo")
+                    return lst
+                
+                def cargar_peliculas (file, sep=";"):
+                    lst = lt.newList('SINGLE_LINKED', comparar_id)
+                    print("Cargando archivo ....")
+                    #t1_start = process_time() #tiempo inicial
+                    dialect = csv.excel()
+                    dialect.delimiter=sep
+                    try:
+                        with open(file, encoding="utf-8") as csvfile:
+                            spamreader = csv.DictReader(csvfile, dialect=dialect)
+                            for row in spamreader: 
+
+                                lt.addLast(lst,row)
+                    except:
+                        print("Hubo un error con la carga del archivo")
+                    #t1_stop = process_time() #tiempo final
+                    #print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+                    return lst
+
+                listaActores =cargar_listaActores(cf.data_dir+"themoviesdb/AllMoviesCastingRaw.csv")
+                listaPelicuas = cargar_peliculas(cf.data_dir+"themoviesdb/AllMoviesDetailsCleaned.csv")
+
+                criterio=input("Nombre del actor : ")
+                peliculas_por_actor(listaActores,listaPelicuas,criterio)
 
             elif int(inputs[0])==5: #opcion 5
-                
-                genero = input("Ingrese el genero:\n")
-                itera = it.newIterator(lstmovies)
-                average = 0
-                numero = 0
-                lista_peliculas = lt.newList('ARRAY_LIST', cmpfunction=None)
-                while it.hasNext(itera):
-                    elemento = it.next(itera)
-                    if elemento["genres"] is None:
-                        pass
-                    else:
-                        if genero in elemento["genres"]:
-                            numero +=1
-                            try:
-                                average += float(elemento["vote_average"])
-                                lt.addLast(lista_peliculas,elemento["original_title"])
-                            except:
-                                pass
-                promedio = average/numero
-                tamano = lt.size(lista_peliculas)
-                if tamano == 0:
-                    print("No hay peliculas que coincidan con el genero.")
-                else:
-                    iteraa = it.newIterator(lista_peliculas)
-                    while it.hasNext(iteraa):
-                        pelicula = it.next(iteraa)
-                        print(pelicula)
-                print("La cantidad de peliculas de este genero es:", tamano)
-                print("El promedio es:", promedio)        
-            
-
+                pass
 
             elif int(inputs[0])==6: #opcion 6
 
