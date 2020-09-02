@@ -209,7 +209,7 @@ def cargar_directores(file, sep = ";"):
         with open(file, encoding="utf-8") as csvfile:
             spamreader = csv.DictReader(csvfile, dialect=dialect)
             for row in spamreader: 
-
+        
                 director = {}
                 director["nombre"] = row["director_name"]
                 posicion1 = lt.isPresent(lst, director["nombre"])
